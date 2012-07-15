@@ -38,15 +38,26 @@
 	// Do any additional setup after loading the view, typically from a nib.
     [self setupPhysics];
     
-    for(UIView* view in self.view.subviews) {
-        [self addPhysicalBodyForView: view];
-    }
-    
     tickTimer = [NSTimer scheduledTimerWithTimeInterval: 1./60.f
                                                  target: self
                                                selector: @selector(tick:)
                                                userInfo: nil
                                                 repeats: YES];
+    
+    UIGestureRecognizer* rc = [[UITapGestureRecognizer alloc] initWithTarget: self
+                                                                      action: @selector(tapped:)];
+    [self.view addGestureRecognizer: rc];
+}
+
+- (void) tapped: (UIGestureRecognizer*) recognizer {
+    CGPoint p = [recognizer locationInView: self.view];
+    
+    UIView* v = [[UIView alloc] initWithFrame: CGRectMake(0, 0, 50, 50)];
+    v.center = p;
+    v.backgroundColor = [UIColor colorWithRed: (arc4random() % 100)/100.f green: 0.5 blue: 0.5 alpha: 1.0];
+    
+    [self.view addSubview: v];
+    [self addPhysicalBodyForView: v];
 }
 
 - (void)viewDidUnload
@@ -103,12 +114,8 @@
             if (b->GetUserData() != NULL) {
                 UIView *oneView = (__bridge UIView *)b->GetUserData();
                 
-                NSLog(@"Was at: %@", NSStringFromCGPoint(oneView.center));
-                
                 // y Position subtracted because of flipped coordinate system
                 CGPoint newCenter = CGPointMake( b->GetPosition().x, self.view.bounds.size.height - b->GetPosition().y );
-                
-                NSLog(@"Move to: %@", NSStringFromCGPoint(newCenter));
                 
                 oneView.center = newCenter;
             }
@@ -133,7 +140,7 @@
     b2Body* magnetBody = world->CreateBody(&groundBodyDef);
     
     b2CircleShape circle;
-    circle.m_radius = 1.f;
+    circle.m_radius = self.planetView.bounds.size.width/2.f;
     
     b2FixtureDef fd;
     fd.shape = &circle;
@@ -143,8 +150,6 @@
     b2Vec2 center = magnetBody->GetWorldPoint(circle.m_p);
     
     self.planetView.center = CGPointMake(center.x , center.y );
-    
-    NSLog(@"Planet: %@", NSStringFromCGPoint(self.planetView.center));
 }
 
 - (void) addPhysicalBodyForView:(UIView *)physicalView {
@@ -156,8 +161,8 @@
         return;
     
     CGPoint p = physicalView.center;
-    CGPoint boxDimenstions = CGPointMake(physicalView.bounds.size.width, 
-                                         physicalView.bounds.size.height);
+    CGPoint boxDimenstions = CGPointMake(physicalView.bounds.size.width/2.f, 
+                                         physicalView.bounds.size.height/2.f);
     
     if( canMove ) {
         b2BodyDef bodyDef;
@@ -176,7 +181,6 @@
         fixtureDef.shape = &dynamicBox;
         fixtureDef.density = 1.0f;
         fixtureDef.friction = 0.3f;
-        //fixtureDef.restitution = 0.5f;
         body->CreateFixture(&fixtureDef);
         
         physicalView.tag = (int)body;

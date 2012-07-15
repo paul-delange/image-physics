@@ -1,3 +1,4 @@
+
 [submodule "box2d"]
 	path = box2d
-	url = https://github.com/ansman/box2d
+	url = https://github.com/ojstewart/box2d-extended.git

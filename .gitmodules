@@ -2,3 +2,9 @@
 [submodule "box2d"]
 	path = box2d
 	url = https://github.com/ojstewart/box2d-extended.git
+[submodule "RestKit"]
+	path = RestKit
+	url = https://github.com/RestKit/RestKit.git
+[submodule "SDWebImage"]
+	path = SDWebImage
+	url = https://github.com/rs/SDWebImage.git

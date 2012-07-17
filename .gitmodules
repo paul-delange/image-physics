@@ -8,3 +8,6 @@
 [submodule "SDWebImage"]
 	path = SDWebImage
 	url = https://github.com/rs/SDWebImage.git
+[submodule "GHUnit"]
+	path = GHUnit
+	url = https://github.com/gabriel/gh-unit.git

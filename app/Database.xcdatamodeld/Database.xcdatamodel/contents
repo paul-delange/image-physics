@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model name="Database" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1171" systemVersion="11E53" minimumToolsVersion="Xcode 4.1" macOSVersion="Automatic" iOSVersion="Automatic">
-    <elements/>
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1800" systemVersion="11E53" minimumToolsVersion="Xcode 4.1" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="SearchResponse" representedClassName="SearchResponse" syncable="YES">
+        <attribute name="term" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="results" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="SearchResult" inverseName="search" inverseEntity="SearchResult" syncable="YES"/>
+    </entity>
+    <entity name="SearchResult" representedClassName="SearchResult" syncable="YES">
+        <attribute name="mediaURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="thumbURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="search" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="SearchResponse" inverseName="results" inverseEntity="SearchResponse" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="SearchResult" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="SearchResponse" positionX="0" positionY="0" width="0" height="0"/>
+    </elements>
 </model>

@@ -8,15 +8,21 @@
 
 #import "ViewController.h"
 
+#import "SearchResult.h"
+
 #import <Box2D/Box2D.h>
+#import <CoreData/CoreData.h>
+#import <RestKit/RestKit.h>
 
 #define kRADIAL_GRAVITY_FORCE 250000000.f
 
-@interface ViewController () {
+@interface ViewController () <NSFetchedResultsControllerDelegate> {
     b2World* world;
     b2Fixture* magnetFixture;
     NSTimer* tickTimer;
 }
+
+@property (nonatomic, readonly) NSFetchedResultsController* resultsController;
 
 - (void) setupPhysics;
 - (void) addPhysicalBodyForView: (UIView*) physicalView;
@@ -26,6 +32,7 @@
 
 @implementation ViewController
 @synthesize planetView;
+@synthesize resultsController;
 
 - (void) dealloc {
     [tickTimer invalidate];
@@ -185,6 +192,43 @@
         
         physicalView.tag = (int)body;
     }
+}
+
+- (NSFetchedResultsController*) resultsController {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        resultsController = [SearchResult fetchAllSortedBy: @"url"
+                                                 ascending: YES
+                                             withPredicate: nil
+                                                   groupBy: nil];
+    });
+    
+    return resultsController;
+}
+
+#pragma mark -
+#pragma mark NSFetchedResultsControllerDelegate
+- (void)controller:(NSFetchedResultsController *)controller 
+   didChangeObject:(id)anObject 
+       atIndexPath:(NSIndexPath *)indexPath 
+     forChangeType:(NSFetchedResultsChangeType)type 
+      newIndexPath:(NSIndexPath *)newIndexPath {
+    
+}
+
+- (void)controller:(NSFetchedResultsController *)controller 
+  didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo 
+           atIndex:(NSUInteger)sectionIndex 
+     forChangeType:(NSFetchedResultsChangeType)type {
+    
+}
+
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
+    
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+    
 }
 
 @end

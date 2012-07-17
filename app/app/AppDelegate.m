@@ -7,6 +7,9 @@
 //
 
 #import "AppDelegate.h"
+#import "configureRestKit.h"
+
+#import <RestKit/RestKit.h>
 
 @implementation AppDelegate
 
@@ -14,7 +17,12 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    
     // Override point for customization after application launch.
+    RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURLString: @""];
+    manager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename: @"Database"];
+    configureRestKit(manager);
+    
     return YES;
 }
 							

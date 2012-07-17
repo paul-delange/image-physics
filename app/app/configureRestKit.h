@@ -6,8 +6,6 @@
 //  Copyright (c) 2012 Scimob. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@class RKObjectManager;
 
-@interface configureRestKit : NSObject
-
-@end
+extern void configureRestKit(RKObjectManager* manager);

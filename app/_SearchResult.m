@@ -4,11 +4,13 @@
 #import "_SearchResult.h"
 
 const struct SearchResultAttributes SearchResultAttributes = {
-	.thumbnail = @"thumbnail",
-	.url = @"url",
+	.mediaURL = @"mediaURL",
+	.thumbURL = @"thumbURL",
+	.title = @"title",
 };
 
 const struct SearchResultRelationships SearchResultRelationships = {
+	.search = @"search",
 };
 
 const struct SearchResultFetchedProperties SearchResultFetchedProperties = {
@@ -47,19 +49,30 @@ const struct SearchResultFetchedProperties SearchResultFetchedProperties = {
 
 
 
-@dynamic thumbnail;
+@dynamic mediaURL;
 
 
 
 
 
 
-@dynamic url;
+@dynamic thumbURL;
 
 
 
 
 
+
+@dynamic title;
+
+
+
+
+
+
+@dynamic search;
+
+	
 
 
 

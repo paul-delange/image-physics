@@ -19,16 +19,13 @@ typedef void(^BingPaginatorDidFailWithErrorBlock)(NSError* error, RKObjectLoader
 
 @interface BingPaginator : NSObject
 
-+ (id) paginatorWithPatternURL: (RKURL*) patternURL;
++ (id) paginatorWithSearchTerm: (NSString*) searchTerm;
 
 @property (nonatomic, weak) id<BingPaginatorDelegate> delegate;
 @property (nonatomic, copy) BingPaginatorDidLoadObjectsAtOffsetBlock onDidLoadObjectsAtOffset;
 @property (nonatomic, copy) BingPaginatorDidFailWithErrorBlock onDidFailWithError;
 
-@property (nonatomic, copy) RKURL* patternURL;
-
-@property (nonatomic, assign) NSUInteger perPage;
-@property (nonatomic, readonly) NSUInteger currentOffset;
+@property (nonatomic, readonly) NSUInteger perPage;
 @property (nonatomic, readonly) NSUInteger objectCount;
 
 - (void) loadNextPage;

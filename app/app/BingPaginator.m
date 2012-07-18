@@ -15,11 +15,15 @@ static NSUInteger BingPaginatorDefaultPerPage = 25;
 
 @interface BingPaginator () <RKObjectLoaderDelegate>
 
++ (id) paginatorWithPatternURL: (RKURL*) patternURL;
 - (id)initWithPatternURL:(RKURL *)aPatternURL;
 - (BOOL) hasNextPage;
 - (BOOL) hasPreviousPage;
 
+@property (nonatomic, readonly) NSUInteger currentOffset;
 @property (nonatomic, readonly) RKURL* URL;
+@property (nonatomic, copy) RKURL* patternURL;
+
 @end
 
 @implementation BingPaginator
@@ -29,6 +33,18 @@ static NSUInteger BingPaginatorDefaultPerPage = 25;
 @synthesize patternURL, URL;
 @synthesize currentOffset;
 @synthesize objectCount;
+
++ (id) paginatorWithSearchTerm: (NSString*) searchTerm {
+    RKURL* baseURL = [RKObjectManager sharedManager].client.baseURL;
+    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:
+                            @":perPage", @"Image.Count",
+                            @":currentOffset", @"Image.Offset",
+                            @"EADA47E8862F8D8EE67D68882289189A2115F6AA", @"AppId",
+                            @"Image", @"Sources",
+                            searchTerm, @"Query",
+                            nil];
+    return [self paginatorWithPatternURL: [baseURL URLByAppendingQueryParameters: params]];
+}
 
 + (id) paginatorWithPatternURL: (RKURL*) patternURL {
     return [[self alloc] initWithPatternURL: patternURL ];

@@ -9,6 +9,10 @@
 #import "ViewController.h"
 
 #import "SearchResult.h"
+#import "BingPaginator.h"
+
+#import "PhysicalImageView.h"
+#import "PlanetView.h"
 
 #import <Box2D/Box2D.h>
 #import <CoreData/CoreData.h>
@@ -16,13 +20,14 @@
 
 #define kRADIAL_GRAVITY_FORCE 250000000.f
 
-@interface ViewController () <NSFetchedResultsControllerDelegate> {
+@interface ViewController () <NSFetchedResultsControllerDelegate, UITextFieldDelegate> {
     b2World* world;
     b2Fixture* magnetFixture;
     NSTimer* tickTimer;
 }
 
 @property (nonatomic, readonly) NSFetchedResultsController* resultsController;
+@property (nonatomic, strong) NSMutableArray* moveableBodies;
 
 - (void) setupPhysics;
 - (void) addPhysicalBodyForView: (UIView*) physicalView;
@@ -33,16 +38,20 @@
 @implementation ViewController
 @synthesize planetView;
 @synthesize resultsController;
+@synthesize moveableBodies;
 
 - (void) dealloc {
     [tickTimer invalidate];
     delete world;
+    self.moveableBodies = nil;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    self.moveableBodies = [NSMutableArray array];
+    
     [self setupPhysics];
     
     tickTimer = [NSTimer scheduledTimerWithTimeInterval: 1./60.f
@@ -59,11 +68,10 @@
 - (void) tapped: (UIGestureRecognizer*) recognizer {
     CGPoint p = [recognizer locationInView: self.view];
     
-    UIView* v = [[UIView alloc] initWithFrame: CGRectMake(0, 0, 50, 50)];
+    UIView* v = [[PhysicalView alloc] initWithFrame: CGRectMake(0, 0, 50, 50)];
     v.center = p;
     v.backgroundColor = [UIColor colorWithRed: (arc4random() % 100)/100.f green: 0.5 blue: 0.5 alpha: 1.0];
     
-    [self.view addSubview: v];
     [self addPhysicalBodyForView: v];
 }
 
@@ -74,6 +82,8 @@
     // Release any retained subviews of the main view.
     [tickTimer invalidate];
     delete world;
+    
+    self.moveableBodies = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -145,6 +155,7 @@
     groundBodyDef.position.Set(self.view.bounds.size.width/2.f, self.view.bounds.size.height/2.f);
     
     b2Body* magnetBody = world->CreateBody(&groundBodyDef);
+    self.planetView.body = magnetBody;
     
     b2CircleShape circle;
     circle.m_radius = self.planetView.bounds.size.width/2.f;
@@ -190,8 +201,10 @@
         fixtureDef.friction = 0.3f;
         body->CreateFixture(&fixtureDef);
         
-        physicalView.tag = (int)body;
+        ((PhysicalView*)physicalView).body = body;
     }
+    
+    [self.view addSubview: physicalView];
 }
 
 - (NSFetchedResultsController*) resultsController {
@@ -228,7 +241,32 @@
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+    NSArray* fetched = [controller fetchedObjects];
+    NSPredicate* alreadyDisplayed = [NSPredicate predicateWithFormat: @"NOT (self.mediaURL IN %@)", self.moveableBodies];
+    NSArray* newObjects = [fetched filteredArrayUsingPredicate: alreadyDisplayed];
     
+    for(SearchResult* result in newObjects) {
+        UIView* v = [[UIView alloc] initWithFrame: CGRectMake(0, 0, 50, 50)];
+        v.center = CGPointMake(arc4random() % (int)self.view.bounds.size.width, arc4random() % (int)self.view.bounds.size.height);
+        v.backgroundColor = [UIColor colorWithRed: (arc4random() % 100)/100.f green: 0.5 blue: 0.5 alpha: 1.0];
+        [self addPhysicalBodyForView: v];
+    }
+}
+
+#pragma mark - UITextFieldDelegate
+- (BOOL) textFieldShouldReturn:(UITextField *)textField {
+    NSString* searchTerm = textField.text;
+    
+    BingPaginator* paginator = [BingPaginator paginatorWithSearchTerm: searchTerm];
+    paginator.onDidLoadObjectsAtOffset = ^(NSArray* objs, NSUInteger offset) {
+        
+    };
+    paginator.onDidFailWithError = ^(NSError* error, RKObjectLoader* loader) {
+        
+    };
+    [paginator loadNextPage];
+    
+    return YES;
 }
 
 @end

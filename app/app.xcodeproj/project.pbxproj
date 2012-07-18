@@ -52,6 +52,12 @@
 		52F773E415B57B60006D416F /* SearchResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 52F773E315B57B60006D416F /* SearchResponse.m */; };
 		52F773E615B57B6B006D416F /* _SearchResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 52F773E515B57B6B006D416F /* _SearchResponse.m */; };
 		52F773EA15B58868006D416F /* BingPaginator.m in Sources */ = {isa = PBXBuildFile; fileRef = 52F773E915B58868006D416F /* BingPaginator.m */; };
+		52FF605315B6D4B700958C5C /* PhysicalView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 52FF605215B6D4B700958C5C /* PhysicalView.mm */; };
+		52FF605415B6D4B700958C5C /* PhysicalView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 52FF605215B6D4B700958C5C /* PhysicalView.mm */; };
+		52FF605715B6DA6300958C5C /* PlanetView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 52FF605615B6DA6300958C5C /* PlanetView.mm */; };
+		52FF605815B6DA6300958C5C /* PlanetView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 52FF605615B6DA6300958C5C /* PlanetView.mm */; };
+		52FF605B15B6DA7600958C5C /* PhysicalImageView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 52FF605A15B6DA7600958C5C /* PhysicalImageView.mm */; };
+		52FF605C15B6DA7600958C5C /* PhysicalImageView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 52FF605A15B6DA7600958C5C /* PhysicalImageView.mm */; };
 		DA7726C215B2E69C008195A1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA7726C115B2E69C008195A1 /* UIKit.framework */; };
 		DA7726C415B2E69C008195A1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA7726C315B2E69C008195A1 /* Foundation.framework */; };
 		DA7726C615B2E69C008195A1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA7726C515B2E69C008195A1 /* CoreGraphics.framework */; };
@@ -201,6 +207,12 @@
 		52F773E515B57B6B006D416F /* _SearchResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _SearchResponse.m; sourceTree = "<group>"; };
 		52F773E815B58868006D416F /* BingPaginator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BingPaginator.h; sourceTree = "<group>"; };
 		52F773E915B58868006D416F /* BingPaginator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BingPaginator.m; sourceTree = "<group>"; };
+		52FF605115B6D4B700958C5C /* PhysicalView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhysicalView.h; sourceTree = "<group>"; };
+		52FF605215B6D4B700958C5C /* PhysicalView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PhysicalView.mm; sourceTree = "<group>"; };
+		52FF605515B6DA6300958C5C /* PlanetView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlanetView.h; sourceTree = "<group>"; };
+		52FF605615B6DA6300958C5C /* PlanetView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PlanetView.mm; sourceTree = "<group>"; };
+		52FF605915B6DA7600958C5C /* PhysicalImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhysicalImageView.h; sourceTree = "<group>"; };
+		52FF605A15B6DA7600958C5C /* PhysicalImageView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PhysicalImageView.mm; sourceTree = "<group>"; };
 		DA7726BD15B2E69C008195A1 /* app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = app.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA7726C115B2E69C008195A1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		DA7726C315B2E69C008195A1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -268,12 +280,12 @@
 		5200BAF915B59DC300794705 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				5200BAFA15B59DC300794705 /* Supporting Files */,
+				5200BAFA15B59DC300794705 /* Unit */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
 		};
-		5200BAFA15B59DC300794705 /* Supporting Files */ = {
+		5200BAFA15B59DC300794705 /* Unit */ = {
 			isa = PBXGroup;
 			children = (
 				5200BAFB15B59DC300794705 /* Tests-Info.plist */,
@@ -281,7 +293,7 @@
 				5200BAFF15B59DC300794705 /* main.m */,
 				5200BBA515B5AC7F00794705 /* DataProviderTest.m */,
 			);
-			name = "Supporting Files";
+			name = Unit;
 			sourceTree = "<group>";
 		};
 		52AF9A3415B427EF008FC1CC /* Products */ = {
@@ -329,11 +341,11 @@
 		DA7726B215B2E69B008195A1 = {
 			isa = PBXGroup;
 			children = (
+				5200BAF915B59DC300794705 /* Tests */,
 				DA7726E515B2E75F008195A1 /* Vendor */,
 				DA7726C715B2E69C008195A1 /* Classes */,
 				DA7726E115B2E6A7008195A1 /* Resources */,
 				DA77278615B2E91B008195A1 /* Linked Projects */,
-				5200BAF915B59DC300794705 /* Tests */,
 				DA7726C015B2E69C008195A1 /* Frameworks */,
 				DA7726BE15B2E69C008195A1 /* Products */,
 				5200BB3315B59DDD00794705 /* app copy-Info.plist */,
@@ -408,6 +420,12 @@
 		DA7726E315B2E6C4008195A1 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				52FF605515B6DA6300958C5C /* PlanetView.h */,
+				52FF605615B6DA6300958C5C /* PlanetView.mm */,
+				52FF605915B6DA7600958C5C /* PhysicalImageView.h */,
+				52FF605A15B6DA7600958C5C /* PhysicalImageView.mm */,
+				52FF605115B6D4B700958C5C /* PhysicalView.h */,
+				52FF605215B6D4B700958C5C /* PhysicalView.mm */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -668,6 +686,9 @@
 				5200BB1A15B59DDD00794705 /* BingPaginator.m in Sources */,
 				5200BBA315B5AB6E00794705 /* main.m in Sources */,
 				5200BBA615B5AC7F00794705 /* DataProviderTest.m in Sources */,
+				52FF605415B6D4B700958C5C /* PhysicalView.mm in Sources */,
+				52FF605815B6DA6300958C5C /* PlanetView.mm in Sources */,
+				52FF605C15B6DA7600958C5C /* PhysicalImageView.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -685,6 +706,9 @@
 				52F773E415B57B60006D416F /* SearchResponse.m in Sources */,
 				52F773E615B57B6B006D416F /* _SearchResponse.m in Sources */,
 				52F773EA15B58868006D416F /* BingPaginator.m in Sources */,
+				52FF605315B6D4B700958C5C /* PhysicalView.mm in Sources */,
+				52FF605715B6DA6300958C5C /* PlanetView.mm in Sources */,
+				52FF605B15B6DA7600958C5C /* PhysicalImageView.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

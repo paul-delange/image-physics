@@ -19,7 +19,7 @@
 {
     
     // Override point for customization after application launch.
-    RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURLString: @""];
+    RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURLString: @"http://api.bing.net/json.aspx"];
     manager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename: @"Database"];
     configureRestKit(manager);
     

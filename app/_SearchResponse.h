@@ -40,9 +40,9 @@ extern const struct SearchResponseFetchedProperties {
 
 
 
-@property (nonatomic, strong) SearchResult* results;
+@property (nonatomic, strong) NSSet* results;
 
-//- (BOOL)validateResults:(id*)value_ error:(NSError**)error_;
+- (NSMutableSet*)resultsSet;
 
 
 
@@ -51,6 +51,11 @@ extern const struct SearchResponseFetchedProperties {
 @end
 
 @interface _SearchResponse (CoreDataGeneratedAccessors)
+
+- (void)addResults:(NSSet*)value_;
+- (void)removeResults:(NSSet*)value_;
+- (void)addResultsObject:(SearchResult*)value_;
+- (void)removeResultsObject:(SearchResult*)value_;
 
 @end
 
@@ -64,8 +69,8 @@ extern const struct SearchResponseFetchedProperties {
 
 
 
-- (SearchResult*)primitiveResults;
-- (void)setPrimitiveResults:(SearchResult*)value;
+- (NSMutableSet*)primitiveResults;
+- (void)setPrimitiveResults:(NSMutableSet*)value;
 
 
 @end

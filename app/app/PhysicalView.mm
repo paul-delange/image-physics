@@ -7,6 +7,7 @@
 //
 
 #import "PhysicalView.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface PhysicalView ()
 
@@ -20,16 +21,12 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        [self addObserver: self
-               forKeyPath: @"layer.position"
-                  options: NSKeyValueObservingOptionNew
-                  context: nil];
+        [self.layer addObserver: self
+                     forKeyPath: @"position"
+                        options: NSKeyValueObservingOptionNew
+                        context: nil];
     }
     return self;
-}
-
-- (void) dealloc {
-    [self removeObserver: self forKeyPath: @"layer.position" context: nil];
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {

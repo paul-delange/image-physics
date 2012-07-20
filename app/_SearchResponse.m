@@ -57,6 +57,15 @@ const struct SearchResponseFetchedProperties SearchResponseFetchedProperties = {
 @dynamic results;
 
 	
+- (NSMutableSet*)resultsSet {
+	[self willAccessValueForKey:@"results"];
+  
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"results"];
+  
+	[self didAccessValueForKey:@"results"];
+	return result;
+}
+	
 
 
 

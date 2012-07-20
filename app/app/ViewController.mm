@@ -28,6 +28,7 @@
 
 @property (nonatomic, readonly) NSFetchedResultsController* resultsController;
 @property (nonatomic, strong) NSMutableArray* moveableBodies;
+@property (nonatomic, strong) BingPaginator* paginator;
 
 - (void) setupPhysics;
 - (void) addPhysicalBodyForView: (UIView*) physicalView;
@@ -39,6 +40,7 @@
 @synthesize planetView;
 @synthesize resultsController;
 @synthesize moveableBodies;
+@synthesize paginator;
 
 - (void) dealloc {
     [tickTimer invalidate];
@@ -63,6 +65,8 @@
     UIGestureRecognizer* rc = [[UITapGestureRecognizer alloc] initWithTarget: self
                                                                       action: @selector(tapped:)];
     [self.view addGestureRecognizer: rc];
+    
+    [[self resultsController] performFetch: nil];
 }
 
 - (void) tapped: (UIGestureRecognizer*) recognizer {
@@ -210,10 +214,11 @@
 - (NSFetchedResultsController*) resultsController {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        resultsController = [SearchResult fetchAllSortedBy: @"url"
+        resultsController = [SearchResult fetchAllSortedBy: @"mediaURL"
                                                  ascending: YES
                                              withPredicate: nil
                                                    groupBy: nil];
+        resultsController.delegate = self;
     });
     
     return resultsController;
@@ -233,7 +238,6 @@
   didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo 
            atIndex:(NSUInteger)sectionIndex 
      forChangeType:(NSFetchedResultsChangeType)type {
-    
 }
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
@@ -246,7 +250,7 @@
     NSArray* newObjects = [fetched filteredArrayUsingPredicate: alreadyDisplayed];
     
     for(SearchResult* result in newObjects) {
-        UIView* v = [[UIView alloc] initWithFrame: CGRectMake(0, 0, 50, 50)];
+        UIView* v = [[PhysicalImageView alloc] initWithFrame: CGRectMake(0, 0, 50, 50)];
         v.center = CGPointMake(arc4random() % (int)self.view.bounds.size.width, arc4random() % (int)self.view.bounds.size.height);
         v.backgroundColor = [UIColor colorWithRed: (arc4random() % 100)/100.f green: 0.5 blue: 0.5 alpha: 1.0];
         [self addPhysicalBodyForView: v];
@@ -257,14 +261,14 @@
 - (BOOL) textFieldShouldReturn:(UITextField *)textField {
     NSString* searchTerm = textField.text;
     
-    BingPaginator* paginator = [BingPaginator paginatorWithSearchTerm: searchTerm];
-    paginator.onDidLoadObjectsAtOffset = ^(NSArray* objs, NSUInteger offset) {
+    self.paginator = [BingPaginator paginatorWithSearchTerm: searchTerm];
+    self.paginator.onDidLoadObjectsAtOffset = ^(NSArray* objs, NSUInteger offset) {
         
     };
-    paginator.onDidFailWithError = ^(NSError* error, RKObjectLoader* loader) {
+    self.paginator.onDidFailWithError = ^(NSError* error, RKObjectLoader* loader) {
         
     };
-    [paginator loadNextPage];
+    [self.paginator loadNextPage];
     
     return YES;
 }

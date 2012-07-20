@@ -15,14 +15,13 @@ static NSUInteger BingPaginatorDefaultPerPage = 25;
 
 @interface BingPaginator () <RKObjectLoaderDelegate>
 
-+ (id) paginatorWithPatternURL: (RKURL*) patternURL;
-- (id)initWithPatternURL:(RKURL *)aPatternURL;
++ (id) paginatorWithPattern: (NSString*) pattern;
+- (id)initWithPattern:(NSString*) pattern;
 - (BOOL) hasNextPage;
 - (BOOL) hasPreviousPage;
 
 @property (nonatomic, readonly) NSUInteger currentOffset;
-@property (nonatomic, readonly) RKURL* URL;
-@property (nonatomic, copy) RKURL* patternURL;
+@property (nonatomic, strong) NSString* pattern;
 
 @end
 
@@ -30,30 +29,26 @@ static NSUInteger BingPaginatorDefaultPerPage = 25;
 @synthesize delegate;
 @synthesize onDidLoadObjectsAtOffset, onDidFailWithError;
 @synthesize perPage;
-@synthesize patternURL, URL;
+@synthesize pattern;
 @synthesize currentOffset;
 @synthesize objectCount;
 
 + (id) paginatorWithSearchTerm: (NSString*) searchTerm {
-    RKURL* baseURL = [RKObjectManager sharedManager].client.baseURL;
-    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:
-                            @":perPage", @"Image.Count",
-                            @":currentOffset", @"Image.Offset",
-                            @"EADA47E8862F8D8EE67D68882289189A2115F6AA", @"AppId",
-                            @"Image", @"Sources",
-                            searchTerm, @"Query",
-                            nil];
-    return [self paginatorWithPatternURL: [baseURL URLByAppendingQueryParameters: params]];
+    
+    NSString* urlEncoded = [searchTerm stringByAddingURLEncoding];
+    NSString* pattern = [NSString stringWithFormat: @"/json.aspx?AppId=EADA47E8862F8D8EE67D68882289189A2115F6AA&Sources=Image&Query=%@&Image.Count=:perPage&Image.Offset=:currentOffset", urlEncoded];
+    
+    return [self paginatorWithPattern: pattern];
 }
 
-+ (id) paginatorWithPatternURL: (RKURL*) patternURL {
-    return [[self alloc] initWithPatternURL: patternURL ];
++ (id) paginatorWithPattern:(NSString *)pattern {
+    return [[self alloc] initWithPattern: pattern];
 }
 
-- (id)initWithPatternURL:(RKURL *)aPatternURL {
+- (id)initWithPattern:(NSString *)p {
     self = [super init];
     if( self ) {
-        patternURL = [aPatternURL copy];
+        pattern = [p copy];
         currentOffset = 0;
         objectCount = NSUIntegerMax;
         perPage = BingPaginatorDefaultPerPage;
@@ -68,10 +63,6 @@ static NSUInteger BingPaginatorDefaultPerPage = 25;
 - (BOOL) hasPreviousPage {
     return self.currentOffset > 0;
 }
-
-- (RKURL*) URL {
-    return [patternURL URLByInterpolatingResourcePathWithObject: self];
-}
  
 - (void) loadNextPage {
     [self loadPageAtOffset: self.currentOffset + self.perPage];
@@ -83,13 +74,10 @@ static NSUInteger BingPaginatorDefaultPerPage = 25;
 
 - (void) loadPageAtOffset: (NSUInteger) offset {
     currentOffset = offset;
+
+    NSString* resPath = [self.pattern interpolateWithObject: self];
     
-    RKManagedObjectStore* store = [RKObjectManager sharedManager].objectStore;
-    RKObjectMappingProvider* provider = [RKObjectManager sharedManager].mappingProvider;
-    
-    RKObjectLoader* objectLoader = [[RKManagedObjectLoader alloc] initWithURL: self.URL
-                                                              mappingProvider: provider
-                                                                  objectStore: store];
+    RKObjectLoader* objectLoader = [[RKObjectManager sharedManager] loaderWithResourcePath: resPath];
     
     if( [self.delegate respondsToSelector: @selector(configureObjectLoader:)])
         [self.delegate configureObjectLoader: objectLoader];

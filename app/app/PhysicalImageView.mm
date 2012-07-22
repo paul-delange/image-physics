@@ -8,7 +8,10 @@
 
 #import "PhysicalImageView.h"
 
+#import "SearchResult.h"
+
 @implementation PhysicalImageView
+@synthesize imageModel;
 
 - (id)initWithFrame:(CGRect)frame
 {

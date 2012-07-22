@@ -8,6 +8,10 @@
 
 #import "PhysicalView.h"
 
+@class SearchResult;
+
 @interface PhysicalImageView : PhysicalView
+
+@property (nonatomic, strong) SearchResult* imageModel;
 
 @end

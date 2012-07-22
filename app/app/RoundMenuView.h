@@ -10,4 +10,10 @@
 
 @interface RoundMenuView : UIView
 
+
+@property (nonatomic, assign) CGPoint circleCenter;
+
+- (void) show;
+- (void) hide;
+
 @end

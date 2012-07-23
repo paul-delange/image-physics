@@ -11,12 +11,16 @@
 #import "SearchResult.h"
 #import "BingPaginator.h"
 
-#import "RoundMenuView.h"
 #import "PhysicalImageView.h"
+#import "PhysicalWorldView.h"
 #import "PlanetView.h"
+
+#import "RoundMenuView.h"
+#import "ImageDetailView.h"
 
 #import <Box2D/Box2D.h>
 #import <CoreData/CoreData.h>
+#import <QuartzCore/QuartzCore.h>
 #import <RestKit/RestKit.h>
 
 #define kRADIAL_GRAVITY_FORCE 250000000.f
@@ -28,9 +32,12 @@
     NSTimer* tickTimer;
     
     BOOL physicsPaused;
+    CADisplayLink* displayLink;
+    CFTimeInterval lastDrawTime;
 }
 
 @property (nonatomic, readonly) NSFetchedResultsController* resultsController;
+@property (nonatomic, readonly) NSArray* displayedImagePaths;
 @property (nonatomic, strong) NSMutableArray* moveableBodies;
 @property (nonatomic, strong) BingPaginator* paginator;
 
@@ -51,11 +58,19 @@
 @synthesize moveableBodies;
 @synthesize paginator;
 
+- (NSArray*) displayedImagePaths {
+    NSPredicate* mustBeImageViewPredicate = [NSPredicate predicateWithFormat: @"self isKindOfClass: %@", [PhysicalImageView class]];
+    NSArray* allPhysicalImageViews = [self.worldCanvas.subviews filteredArrayUsingPredicate: mustBeImageViewPredicate];
+    return [allPhysicalImageViews valueForKeyPath: @"@unionOfObjects.imageModel.mediaURL"];
+}
+
 - (void) dealloc {
     [tickTimer invalidate];
     delete world;
     
     [[NSNotificationCenter defaultCenter] removeObserver: self];
+    [displayLink invalidate];
+    displayLink = nil;
 }
 
 - (void)viewDidLoad
@@ -69,27 +84,37 @@
     
     [self setupPhysics];
     
+    /*
+    displayLink = [CADisplayLink displayLinkWithTarget: self.worldCanvas
+                                              selector: @selector(update:)];
+    [displayLink setFrameInterval: 2];
+    [displayLink addToRunLoop: [NSRunLoop currentRunLoop] forMode: NSDefaultRunLoopMode];
+    */
+    
     tickTimer = [NSTimer scheduledTimerWithTimeInterval: 1./60.f
                                                  target: self
                                                selector: @selector(tick:)
                                                userInfo: nil
                                                 repeats: YES];
     
-    UIGestureRecognizer* rc = [[UITapGestureRecognizer alloc] initWithTarget: self
-                                                                      action: @selector(tapped:)];
-    [self.view addGestureRecognizer: rc];
+    UIGestureRecognizer* planetTap = [[UITapGestureRecognizer alloc] initWithTarget: self
+                                                                             action: @selector(planetTapped:)];
     
+    UIGestureRecognizer* planetHeld = [[UILongPressGestureRecognizer alloc] initWithTarget: self
+                                                                                    action: @selector(planetHeld:)];
+    
+    [self.planetView addGestureRecognizer: planetTap];
+    [self.planetView addGestureRecognizer: planetHeld];
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(keyboardWillAppear:)
+                                                 name: UIKeyboardWillShowNotification
+                                               object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(keyboardWillDisappear:)
+                                                 name: UIKeyboardWillHideNotification
+                                               object: nil];
     [[self resultsController] performFetch: nil];
-}
-
-- (void) tapped: (UIGestureRecognizer*) recognizer {
-    CGPoint p = [recognizer locationInView: self.worldCanvas];
-    
-    UIView* v = [[PhysicalView alloc] initWithFrame: CGRectMake(0, 0, 50, 50)];
-    v.center = p;
-    v.backgroundColor = [UIColor colorWithRed: (arc4random() % 100)/100.f green: 0.5 blue: 0.5 alpha: 1.0];
-    
-    [self addPhysicalBodyForView: v];
 }
 
 - (void)viewDidUnload
@@ -111,6 +136,9 @@
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: UIKeyboardWillHideNotification
                                                   object: nil];
+    
+    [displayLink invalidate];
+    displayLink = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -145,9 +173,6 @@
     b2Body* body = magnetFixture->GetBody();
     
     b2Vec2 center = body->GetWorldPoint(circle->m_p);
-      
-    //UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    //BOOL isLandscape = UIInterfaceOrientationIsLandscape(orientation);
     
 	//Iterate over the bodies in the physics world
 	for (b2Body* b = world->GetBodyList(); b; b = b->GetNext())
@@ -218,6 +243,26 @@
     if( physicalView == self.planetView ) 
         return;
     
+    
+    CGFloat x = arc4random() % (int)self.worldCanvas.bounds.size.width;
+    CGFloat y = arc4random() % (int)self.worldCanvas.bounds.size.height;
+    
+    CGFloat halfWidth = self.worldCanvas.bounds.size.width/2.f;
+    CGFloat halfHeight = self.worldCanvas.bounds.size.height/2.f;
+    
+    if( x < halfWidth )
+        x -= halfWidth;
+    else 
+        x += halfWidth;
+    
+    
+    if( y < halfHeight )
+        y -= halfHeight;
+    else
+        y += halfHeight;
+    
+    physicalView.center = CGPointMake(x, y);
+    
     CGPoint p = physicalView.center;
     CGPoint boxDimenstions = CGPointMake(physicalView.bounds.size.width/2.f, 
                                          physicalView.bounds.size.height/2.f);
@@ -245,6 +290,11 @@
     }
     
     [self.worldCanvas addSubview: physicalView];
+    
+    UIGestureRecognizer* tap = [[UITapGestureRecognizer alloc] initWithTarget: self
+                                                                       action: @selector(imageTapped:)];
+    [physicalView addGestureRecognizer: tap];
+    
 }
 
 - (NSFetchedResultsController*) resultsController {
@@ -267,7 +317,20 @@
        atIndexPath:(NSIndexPath *)indexPath 
      forChangeType:(NSFetchedResultsChangeType)type 
       newIndexPath:(NSIndexPath *)newIndexPath {
-    
+    switch (type) {
+        case NSFetchedResultsChangeInsert:
+        {
+            if( ![self.displayedImagePaths containsObject: [anObject valueForKeyPath: @"mediaURL"]] ) {
+                PhysicalImageView* v = [[PhysicalImageView alloc] initWithFrame: CGRectMake(0, 0, 50, 50)];
+                v.imageModel = anObject;
+                [self addPhysicalBodyForView: v];
+            }
+            
+            break;
+        }
+        default:
+            break;
+    }
 }
 
 - (void)controller:(NSFetchedResultsController *)controller 
@@ -281,16 +344,6 @@
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-    NSArray* fetched = [controller fetchedObjects];
-    NSPredicate* alreadyDisplayed = [NSPredicate predicateWithFormat: @"NOT (self.mediaURL IN %@)", self.displayedImagePaths];
-    NSArray* newObjects = [fetched filteredArrayUsingPredicate: alreadyDisplayed];
-    
-    for(SearchResult* result in newObjects) {
-        UIView* v = [[PhysicalImageView alloc] initWithFrame: CGRectMake(0, 0, 50, 50)];
-        v.center = CGPointMake(arc4random() % (int)self.view.bounds.size.width, arc4random() % (int)self.view.bounds.size.height);
-        v.backgroundColor = [UIColor colorWithRed: (arc4random() % 100)/100.f green: 0.5 blue: 0.5 alpha: 1.0];
-        [self addPhysicalBodyForView: v];
-    }
 }
 
 #pragma mark - UITextFieldDelegate
@@ -305,6 +358,9 @@
         
     };
     [self.paginator loadNextPage];
+    
+    //Remove keyboard
+    [self.searchField resignFirstResponder];
     
     return YES;
 }
@@ -365,12 +421,44 @@
     [menu hide];
 }
 
+- (IBAction)closeDetailsPushed:(id)sender {
+    ImageDetailView* detailView = nil;
+    
+    if( [sender isKindOfClass: [UIGestureRecognizer class]] ) {
+        detailView = (ImageDetailView*)((UIGestureRecognizer*)sender).view;
+    }
+    else if( [sender isKindOfClass: [UIButton class]] ) {
+        detailView = (ImageDetailView*)((UIButton*)sender).superview;
+    }
+    
+    if( detailView ) {
+        NSPredicate* imageViewPredicate = [NSPredicate predicateWithFormat: @"(self isKindOfClass: %@) AND self.imageModel = %@", [PhysicalImageView class], detailView.imageModel];
+        NSArray* imageViews = [self.worldCanvas.subviews filteredArrayUsingPredicate: imageViewPredicate];
+        PhysicalImageView* physicalView = [imageViews lastObject];
+        
+        CGPoint center = [self.view convertPoint: physicalView.center fromView: physicalView];
+        [detailView dismissToPoint: center];
+    }
+}
+
 - (IBAction) playPushed:(id)sender {
     physicsPaused = !physicsPaused;
 }
 
 - (IBAction) refreshPushed:(id)sender {
-    
+    NSPredicate* imageViewPredicate = [NSPredicate predicateWithFormat: @"self isKindOfClass: %@", [PhysicalImageView class]];
+    NSArray* allImageResults = [self.worldCanvas.subviews filteredArrayUsingPredicate: imageViewPredicate];
+    for(UIView* view in allImageResults) {
+        [UIView animateWithDuration: 0.3
+                              delay: 0.0 
+                            options: UIViewAnimationOptionCurveEaseIn
+                         animations: ^{
+                             view.alpha = 0.0f;
+                             view.transform = CGAffineTransformMakeScale(0.1, 0.1);
+                         } completion: ^(BOOL finished) {
+                             [view removeFromSuperview];
+                         }];
+    }
 }
 
 - (IBAction)searchPushed:(id)sender {
@@ -391,6 +479,22 @@
 }
 
 - (IBAction)infoPushed:(UIButton *)sender {
+}
+
+- (IBAction) imageTapped:(UITapGestureRecognizer*)sender {
+    UIView* v = sender.view;
+    if( [v isKindOfClass: [PhysicalImageView class]] ) {
+        PhysicalImageView* view = (PhysicalImageView*)v;
+        
+        ImageDetailView* detailView = [[ImageDetailView alloc] initWithFrame: CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
+        detailView.imageModel = view.imageModel;
+        
+        detailView.backgroundColor = [UIColor colorWithWhite: 0.0 alpha: 0.0];
+        
+        
+        [self.view addSubview: detailView];
+        [detailView showFromPoint: [self.view convertPoint: view.center fromView: view]];
+    }
 }
 
 #pragma mark - Keyboard Management

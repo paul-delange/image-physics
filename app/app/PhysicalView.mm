@@ -20,15 +20,21 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code
+        /*// Initialization code
         [self.layer addObserver: self
                      forKeyPath: @"position"
                         options: NSKeyValueObservingOptionNew
                         context: nil];
+         */
     }
     return self;
 }
 
+- (void) dealloc {
+    b2World* world = self->body->GetWorld();
+    world->DestroyBody(self->body);
+}
+/*
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     NSValue* value = [change objectForKey: NSKeyValueChangeNewKey];
     CGPoint point = [value CGPointValue];
@@ -37,6 +43,7 @@
     if( self.body )
         self.body->SetTransform(position, 0);
 }
+*/
 
 - (void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     UITouch* aTouch = [touches anyObject];

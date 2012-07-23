@@ -5,9 +5,9 @@
 [submodule "RestKit"]
 	path = RestKit
 	url = https://github.com/RestKit/RestKit.git
-[submodule "SDWebImage"]
-	path = SDWebImage
-	url = https://github.com/rs/SDWebImage.git
 [submodule "GHUnit"]
 	path = GHUnit
 	url = https://github.com/gabriel/gh-unit.git
+[submodule "AsyncImageView"]
+	path = AsyncImageView
+	url = https://github.com/nicklockwood/AsyncImageView.git

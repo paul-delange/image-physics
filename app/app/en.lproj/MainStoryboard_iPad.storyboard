@@ -19,13 +19,13 @@
                                 <rect key="frame" x="-256" y="0.0" width="1024" height="1024"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <view contentMode="scaleToFill" id="fgQ-qJ-r83" userLabel="World Canvas">
+                            <view contentMode="scaleToFill" id="fgQ-qJ-r83" userLabel="World Canvas" customClass="PhysicalWorldView">
                                 <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
                             <view contentMode="scaleToFill" id="iEH-16-k4P" customClass="PlanetView">
-                                <rect key="frame" x="406" y="118" width="120" height="120"/>
+                                <rect key="frame" x="411" y="123" width="110" height="110"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
@@ -96,6 +96,9 @@
     <classes>
         <class className="PhysicalView" superclassName="UIView">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/PhysicalView.h"/>
+        </class>
+        <class className="PhysicalWorldView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/PhysicalWorldView.h"/>
         </class>
         <class className="PlanetView" superclassName="PhysicalView">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/PlanetView.h"/>

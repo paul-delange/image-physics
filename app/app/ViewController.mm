@@ -11,6 +11,7 @@
 #import "SearchResult.h"
 #import "BingPaginator.h"
 
+#import "RoundMenuView.h"
 #import "PhysicalImageView.h"
 #import "PlanetView.h"
 
@@ -19,11 +20,14 @@
 #import <RestKit/RestKit.h>
 
 #define kRADIAL_GRAVITY_FORCE 250000000.f
+#define kRoundMenuPlanetViewTag 4321
 
 @interface ViewController () <NSFetchedResultsControllerDelegate, UITextFieldDelegate> {
     b2World* world;
     b2Fixture* magnetFixture;
     NSTimer* tickTimer;
+    
+    BOOL physicsPaused;
 }
 
 @property (nonatomic, readonly) NSFetchedResultsController* resultsController;
@@ -37,6 +41,11 @@
 @end
 
 @implementation ViewController
+@synthesize infoButton;
+@synthesize searchbutton;
+@synthesize searchField;
+@synthesize fadeWorldView;
+@synthesize worldCanvas;
 @synthesize planetView;
 @synthesize resultsController;
 @synthesize moveableBodies;
@@ -45,14 +54,18 @@
 - (void) dealloc {
     [tickTimer invalidate];
     delete world;
-    self.moveableBodies = nil;
+    
+    [[NSNotificationCenter defaultCenter] removeObserver: self];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    self.moveableBodies = [NSMutableArray array];
+    CGRect searchFieldFrame = self.searchField.frame;
+    searchFieldFrame.origin.y = self.searchbutton.frame.origin.y;
+    searchFieldFrame.size.height = self.searchbutton.frame.size.height;
+    self.searchField.frame = searchFieldFrame;
     
     [self setupPhysics];
     
@@ -70,7 +83,7 @@
 }
 
 - (void) tapped: (UIGestureRecognizer*) recognizer {
-    CGPoint p = [recognizer locationInView: self.view];
+    CGPoint p = [recognizer locationInView: self.worldCanvas];
     
     UIView* v = [[PhysicalView alloc] initWithFrame: CGRectMake(0, 0, 50, 50)];
     v.center = p;
@@ -82,25 +95,40 @@
 - (void)viewDidUnload
 {
     [self setPlanetView:nil];
+    [self setInfoButton:nil];
+    [self setSearchbutton:nil];
+    [self setSearchField:nil];
+    [self setFadeWorldView:nil];
+    [self setWorldCanvas:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     [tickTimer invalidate];
     delete world;
     
-    self.moveableBodies = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: UIKeyboardWillShowNotification
+                                                  object: nil];
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: UIKeyboardWillHideNotification
+                                                  object: nil];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
-    } else {
-        return YES;
-    }
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    return YES;
+}
+
+- (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+    
+    b2Vec2 p = b2Vec2(self.planetView.center.x, self.worldCanvas.bounds.size.height - self.planetView.center.y);
+    self.planetView.body->SetTransform(p, 0);
 }
 
 #pragma mark - Physics
 - (void) tick: (NSTimer*) timer {
+    
+    if( physicsPaused )
+        return;
+    
     //It is recommended that a fixed time step is used with Box2D for stability
 	//of the simulation, however, we are using a variable time step here.
 	//You need to make an informed choice, the following URL is useful
@@ -118,6 +146,9 @@
     
     b2Vec2 center = body->GetWorldPoint(circle->m_p);
       
+    //UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    //BOOL isLandscape = UIInterfaceOrientationIsLandscape(orientation);
+    
 	//Iterate over the bodies in the physics world
 	for (b2Body* b = world->GetBodyList(); b; b = b->GetNext())
 	{
@@ -136,7 +167,13 @@
                 UIView *oneView = (__bridge UIView *)b->GetUserData();
                 
                 // y Position subtracted because of flipped coordinate system
-                CGPoint newCenter = CGPointMake( b->GetPosition().x, self.view.bounds.size.height - b->GetPosition().y );
+                CGPoint newCenter = oneView.center;
+                
+                //NSLog(@"Was: %@", NSStringFromCGPoint(newCenter));
+                
+                newCenter = CGPointMake( b->GetPosition().x, self.worldCanvas.bounds.size.height - b->GetPosition().y );
+                
+               // NSLog(@"Now: %@", NSStringFromCGPoint(newCenter));
                 
                 oneView.center = newCenter;
             }
@@ -156,7 +193,7 @@
     // Define the ground body.
     b2BodyDef groundBodyDef;
     groundBodyDef.type = b2_staticBody;
-    groundBodyDef.position.Set(self.view.bounds.size.width/2.f, self.view.bounds.size.height/2.f);
+    groundBodyDef.position.Set(self.planetView.center.x, self.worldCanvas.bounds.size.height - self.planetView.center.y);
     
     b2Body* magnetBody = world->CreateBody(&groundBodyDef);
     self.planetView.body = magnetBody;
@@ -169,9 +206,8 @@
     
     magnetFixture = magnetBody->CreateFixture(&fd);
     
-    b2Vec2 center = magnetBody->GetWorldPoint(circle.m_p);
+    //b2Vec2 center = magnetBody->GetWorldPoint(circle.m_p);
     
-    self.planetView.center = CGPointMake(center.x , center.y );
 }
 
 - (void) addPhysicalBodyForView:(UIView *)physicalView {
@@ -190,7 +226,7 @@
         b2BodyDef bodyDef;
         bodyDef.type = b2_dynamicBody;
         
-        bodyDef.position.Set(p.x, self.view.bounds.size.height-p.y);
+        bodyDef.position.Set(p.x, self.worldCanvas.bounds.size.height-p.y);
         bodyDef.userData = (__bridge void*)physicalView;
         bodyDef.fixedRotation = true;
         
@@ -208,7 +244,7 @@
         ((PhysicalView*)physicalView).body = body;
     }
     
-    [self.view addSubview: physicalView];
+    [self.worldCanvas addSubview: physicalView];
 }
 
 - (NSFetchedResultsController*) resultsController {
@@ -246,7 +282,7 @@
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
     NSArray* fetched = [controller fetchedObjects];
-    NSPredicate* alreadyDisplayed = [NSPredicate predicateWithFormat: @"NOT (self.mediaURL IN %@)", self.moveableBodies];
+    NSPredicate* alreadyDisplayed = [NSPredicate predicateWithFormat: @"NOT (self.mediaURL IN %@)", self.displayedImagePaths];
     NSArray* newObjects = [fetched filteredArrayUsingPredicate: alreadyDisplayed];
     
     for(SearchResult* result in newObjects) {
@@ -271,6 +307,133 @@
     [self.paginator loadNextPage];
     
     return YES;
+}
+
+#pragma mark - Actions
+
+- (IBAction) planetTapped:(UITapGestureRecognizer*)sender {
+    [self searchPushed: sender];
+}
+
+- (IBAction) planetHeld:(UILongPressGestureRecognizer*)sender {
+    
+    //Called twice for some reason :(
+    if( [self.view viewWithTag: kRoundMenuPlanetViewTag] )
+        return;
+    
+    CGRect frame = CGRectMake(0, 0,self.view.bounds.size.width, self.view.bounds.size.height);
+    RoundMenuView* menu = [[RoundMenuView alloc] initWithFrame: frame];
+    menu.tag = kRoundMenuPlanetViewTag;
+    menu.circleCenter = self.planetView.center;
+    
+    UIButton* playButton = [UIButton buttonWithType: UIButtonTypeCustom];
+    [playButton addTarget: self action: @selector(playPushed:) forControlEvents: UIControlEventTouchUpInside];
+     
+    if( physicsPaused ) {
+        [playButton setImage: [UIImage imageNamed: @"play"] forState: UIControlStateNormal];
+    }
+    else {
+        [playButton setImage: [UIImage imageNamed: @"pause"] forState: UIControlStateNormal];
+    }
+    
+    playButton.frame = self.searchbutton.frame;
+    
+    UIButton* closeButton = [UIButton buttonWithType: UIButtonTypeCustom];
+    [closeButton addTarget: self action: @selector(closeMenuPushed:) forControlEvents: UIControlEventTouchUpInside];
+    [closeButton setImage: [UIImage imageNamed: @"shut"] forState: UIControlStateNormal];
+    closeButton.frame = playButton.frame;
+    
+    UIButton* refreshButton = [UIButton buttonWithType: UIButtonTypeCustom];
+    [refreshButton addTarget: self action: @selector(refreshPushed:) forControlEvents: UIControlEventTouchUpInside];
+    [refreshButton setImage: [UIImage imageNamed: @"refresh"] forState: UIControlStateNormal];
+    refreshButton.frame = playButton.frame;
+    
+    [refreshButton addTarget: self action: @selector(closeMenuPushed:) forControlEvents:UIControlEventTouchUpInside];
+    [playButton addTarget: self action: @selector(closeMenuPushed:) forControlEvents: UIControlEventTouchUpInside];
+    
+    [menu addSubview: closeButton];
+    [menu addSubview: playButton];
+    [menu addSubview: refreshButton];
+    
+    [self.view addSubview: menu];
+    
+    [menu show];
+}
+
+- (IBAction) closeMenuPushed:(id)sender {
+    RoundMenuView* menu = (RoundMenuView*)[self.view viewWithTag: kRoundMenuPlanetViewTag];
+    [menu hide];
+}
+
+- (IBAction) playPushed:(id)sender {
+    physicsPaused = !physicsPaused;
+}
+
+- (IBAction) refreshPushed:(id)sender {
+    
+}
+
+- (IBAction)searchPushed:(id)sender {
+    if( [self.searchField isFirstResponder] ) {
+        //Keyboard is active
+        
+        //Run a search
+        
+        //Hide keyboard
+        [self.searchField resignFirstResponder];
+    }
+    else {
+        //Start search mode
+        
+        //Show keyboard
+        [self.searchField becomeFirstResponder];  
+    }
+}
+
+- (IBAction)infoPushed:(UIButton *)sender {
+}
+
+#pragma mark - Keyboard Management
+- (void) keyboardWillAppear: (NSNotification*) notif {
+    NSTimeInterval interval = [[notif.userInfo objectForKey: UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    UIViewAnimationCurve curve = (UIViewAnimationCurve)[[notif.userInfo objectForKey: UIKeyboardAnimationCurveUserInfoKey] intValue];
+    
+    [UIView animateWithDuration: interval
+                          delay: 0.0
+                        options: curve
+                     animations: ^{
+                         self.fadeWorldView.alpha = 0.8;
+                         
+                         CGFloat xOffset = self.searchField.frame.origin.x;
+                         
+                         CGRect searchBarFrame = self.searchField.frame;
+                         searchBarFrame.size.width = self.view.bounds.size.width - xOffset;
+                         
+                         self.searchField.frame = searchBarFrame;
+                         self.searchField.alpha = 1.f;
+                     } completion: ^(BOOL finished) {
+                         
+                     }];
+}
+
+- (void) keyboardWillDisappear: (NSNotification*) notif {
+    NSTimeInterval interval = [[notif.userInfo objectForKey: UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    UIViewAnimationCurve curve = (UIViewAnimationCurve)[[notif.userInfo objectForKey: UIKeyboardAnimationCurveUserInfoKey] intValue];
+    
+    [UIView animateWithDuration: interval
+                          delay: 0.0
+                        options: curve
+                     animations: ^{
+                         self.fadeWorldView.alpha = 0.f;
+                         
+                         CGRect searchBarFrame = self.searchField.frame;
+                         searchBarFrame.size.width = 50;
+                         
+                         self.searchField.frame = searchBarFrame;
+                         self.searchField.alpha = 0.f;
+                     } completion: ^(BOOL finished) {
+                         
+                     }];
 }
 
 @end

@@ -277,8 +277,10 @@
         
         b2Body* body = world->CreateBody(&bodyDef);
         
-        b2PolygonShape dynamicBox;
-        dynamicBox.SetAsBox(boxDimenstions.x, boxDimenstions.y);
+        b2CircleShape dynamicBox;
+        dynamicBox.m_radius = boxDimenstions.x;
+        
+        //dynamicBox.SetAsBox(boxDimenstions.x, boxDimenstions.y);
         
         b2FixtureDef fixtureDef;
         fixtureDef.shape = &dynamicBox;
@@ -321,7 +323,7 @@
         case NSFetchedResultsChangeInsert:
         {
             if( ![self.displayedImagePaths containsObject: [anObject valueForKeyPath: @"mediaURL"]] ) {
-                PhysicalImageView* v = [[PhysicalImageView alloc] initWithFrame: CGRectMake(0, 0, 50, 50)];
+                PhysicalImageView* v = [[PhysicalImageView alloc] initWithFrame: CGRectMake(0, 0, 75, 75)];
                 v.imageModel = anObject;
                 [self addPhysicalBodyForView: v];
             }

@@ -4,4 +4,13 @@
    <FileRef
       location = "group:app/app.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:GPUImage/framework/GPUImage.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:RestKit/RestKit.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:box2d/iOS/box2d.xcodeproj">
+   </FileRef>
 </Workspace>

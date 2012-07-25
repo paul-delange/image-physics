@@ -1,0 +1,11 @@
+VERSION 1.0
+- detail slideshow
+- image filters
+- images from photo roll
+
+VERSION 2.0
+- multiple magnets
+- animated background
+
+VERSION 3.0
+- custom themes/backgrounds

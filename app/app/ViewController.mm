@@ -10,11 +10,13 @@
 
 #import "SearchResult.h"
 #import "BingPaginator.h"
+#import "InAppPurchaseProvider.h"
 
 #import "PhysicalImageView.h"
 #import "PhysicalWorldView.h"
 #import "PlanetView.h"
 
+#import "LoadingView.h"
 #import "RoundMenuView.h"
 #import "ImageDetailView.h"
 
@@ -26,7 +28,9 @@
 #define kRADIAL_GRAVITY_FORCE 250000000.f
 #define kRoundMenuPlanetViewTag 4321
 
-@interface ViewController () <NSFetchedResultsControllerDelegate, UITextFieldDelegate> {
+#define kAlertViewPaginatedDownload 1298
+
+@interface ViewController () <NSFetchedResultsControllerDelegate, UITextFieldDelegate, UIAlertViewDelegate> {
     b2World* world;
     b2Fixture* magnetFixture;
     NSTimer* tickTimer;
@@ -39,7 +43,7 @@
 @property (nonatomic, readonly) NSFetchedResultsController* resultsController;
 @property (nonatomic, readonly) NSArray* displayedImagePaths;
 @property (nonatomic, strong) NSMutableArray* moveableBodies;
-@property (nonatomic, strong) BingPaginator* paginator;
+@property (nonatomic, strong) NSObject<Paginator>* paginator;
 
 - (void) setupPhysics;
 - (void) addPhysicalBodyForView: (UIView*) physicalView;
@@ -50,14 +54,27 @@
 @implementation ViewController
 @synthesize infoButton;
 @synthesize searchbutton;
+@synthesize moreButton;
 @synthesize searchField;
 @synthesize fadeWorldView;
+@synthesize loadingView;
 @synthesize worldCanvas;
 @synthesize planetView;
 @synthesize resultsController;
 @synthesize moveableBodies;
-@synthesize paginator;
+@synthesize paginator = _paginator;
 
+- (void) setPaginator:(NSObject<Paginator> *)paginator {
+    _paginator = paginator;
+    
+    if( !paginator ) {
+        [UIView animateWithDuration: 0.3
+                         animations: ^{
+                             self.moreButton.alpha = 0.f;
+                         }];
+    }
+}
+ 
 - (NSArray*) displayedImagePaths {
     NSPredicate* mustBeImageViewPredicate = [NSPredicate predicateWithFormat: @"self isKindOfClass: %@", [PhysicalImageView class]];
     NSArray* allPhysicalImageViews = [self.worldCanvas.subviews filteredArrayUsingPredicate: mustBeImageViewPredicate];
@@ -114,7 +131,15 @@
                                              selector: @selector(keyboardWillDisappear:)
                                                  name: UIKeyboardWillHideNotification
                                                object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(itemPurchased:)
+                                                 name: kProductPurchasedNotification
+                                               object: nil];
+    
     [[self resultsController] performFetch: nil];
+    
+    self.loadingView.alpha = 0.f;
+    self.moreButton.alpha = 0.f;
 }
 
 - (void)viewDidUnload
@@ -125,6 +150,8 @@
     [self setSearchField:nil];
     [self setFadeWorldView:nil];
     [self setWorldCanvas:nil];
+    [self setLoadingView:nil];
+    [self setMoreButton:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     [tickTimer invalidate];
@@ -135,6 +162,9 @@
                                                   object: nil];
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: UIKeyboardWillHideNotification
+                                                  object: nil];
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: kProductPurchasedNotification
                                                   object: nil];
     
     [displayLink invalidate];
@@ -279,7 +309,7 @@
         
         b2CircleShape dynamicBox;
         dynamicBox.m_radius = boxDimenstions.x;
-        
+        dynamicBox.m_p = b2Vec2();
         //dynamicBox.SetAsBox(boxDimenstions.x, boxDimenstions.y);
         
         b2FixtureDef fixtureDef;
@@ -352,12 +382,27 @@
 - (BOOL) textFieldShouldReturn:(UITextField *)textField {
     NSString* searchTerm = textField.text;
     
+    [self.loadingView startAnimating];
+    
     self.paginator = [BingPaginator paginatorWithSearchTerm: searchTerm];
     self.paginator.onDidLoadObjectsAtOffset = ^(NSArray* objs, NSUInteger offset) {
+        [self.loadingView stopAnimating];
         
+        if( [self.paginator hasNextPage] ) {
+            [UIView animateWithDuration: 0.3
+                             animations: ^{
+                                 self.moreButton.alpha = 1.f;
+                             }];
+        }
+        else {
+            [UIView animateWithDuration: 0.3
+                             animations: ^{
+                                 self.moreButton.alpha = 0.f;
+                             }];
+        }
     };
     self.paginator.onDidFailWithError = ^(NSError* error, RKObjectLoader* loader) {
-        
+        [self.loadingView stopAnimating];
     };
     [self.paginator loadNextPage];
     
@@ -438,9 +483,24 @@
         NSArray* imageViews = [self.worldCanvas.subviews filteredArrayUsingPredicate: imageViewPredicate];
         PhysicalImageView* physicalView = [imageViews lastObject];
         
-        CGPoint center = [self.view convertPoint: physicalView.center fromView: physicalView];
+        CGPoint center = [self.view convertPoint: physicalView.center fromView: self.worldCanvas];
         [detailView dismissToPoint: center];
     }
+}
+
+- (IBAction)morePushed:(UIButton *)sender {
+    
+#if TARGET_IPHONE_SIMULATOR
+    [self.paginator loadNextPage];
+#else
+    if( [[NSUserDefaults standardUserDefaults] boolForKey: kProductIdentifierPaginatedSearches] ) {
+        [self.paginator loadNextPage];
+    }
+    else {
+        [InAppPurchaseProvider purchase: kProductIdentifierPaginatedSearches];
+    }
+    
+#endif
 }
 
 - (IBAction) playPushed:(id)sender {
@@ -481,6 +541,7 @@
 }
 
 - (IBAction)infoPushed:(UIButton *)sender {
+    [InAppPurchaseProvider purchase: kProductIdentifierAlternativeSearches];
 }
 
 - (IBAction) imageTapped:(UITapGestureRecognizer*)sender {
@@ -488,14 +549,24 @@
     if( [v isKindOfClass: [PhysicalImageView class]] ) {
         PhysicalImageView* view = (PhysicalImageView*)v;
         
-        ImageDetailView* detailView = [[ImageDetailView alloc] initWithFrame: CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
+        ImageDetailView* detailView = [[[NSBundle mainBundle] loadNibNamed: @"ImageDetailView"
+                                                                     owner: self
+                                                                   options: nil] lastObject];
+        detailView.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height);
         detailView.imageModel = view.imageModel;
         
-        detailView.backgroundColor = [UIColor colorWithWhite: 0.0 alpha: 0.0];
-        
-        
         [self.view addSubview: detailView];
-        [detailView showFromPoint: [self.view convertPoint: view.center fromView: view]];
+        [detailView showFromPoint: [self.view convertPoint: view.center fromView: self.worldCanvas]];
+    }
+}
+
+
+#pragma mark - Notifications
+- (void) itemPurchased: (NSNotification*) notif {
+    NSString* identifier = [notif.userInfo objectForKey: kProductPurchasedIdentifierKey];
+    
+    if( [identifier isEqualToString: kProductIdentifierPaginatedSearches] ) {
+        [self morePushed: self.moreButton];
     }
 }
 

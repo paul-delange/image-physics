@@ -14,3 +14,9 @@
 [submodule "GPUImage"]
 	path = GPUImage
 	url = https://github.com/BradLarson/GPUImage.git
+[submodule "UDID"]
+	path = UDID
+	url = https://github.com/gekitz/UIDevice-with-UniqueIdentifier-for-iOS-5.git
+[submodule "SDWebImage"]
+	path = SDWebImage
+	url = https://github.com/rs/SDWebImage.git

@@ -13,4 +13,7 @@
    <FileRef
       location = "group:box2d/iOS/box2d.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:SDWebImage/SDWebImage.xcodeproj">
+   </FileRef>
 </Workspace>

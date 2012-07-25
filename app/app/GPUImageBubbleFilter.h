@@ -7,9 +7,9 @@
 //
 
 #import "GPUImage.h"
-#import "GPUImageTwoInputFilter.h"
+#import "GPUImageFilter.h"
 
-@interface GPUImageBubbleFilter : GPUImageTwoInputFilter
+@interface GPUImageBubbleFilter : GPUImageFilter
 
 @property (readwrite, nonatomic) CGFloat refractiveIndex;   
 @property (readwrite, nonatomic) CGFloat radius;            

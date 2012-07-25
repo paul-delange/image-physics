@@ -13,11 +13,11 @@
 
 #import <ImageIO/ImageIO.h>
 #import <QuartzCore/QuartzCore.h>
-#import <AsyncImageView/AsyncImageView.h>
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @interface PhysicalImageView ()
 
-@property (nonatomic, weak) AsyncImageView* imageView;
+@property (nonatomic, weak) UIImageView* imageView;
 
 @end
 
@@ -30,8 +30,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        AsyncImageView* imgView = [[AsyncImageView alloc] initWithFrame: CGRectMake(0, 0, frame.size.width, frame.size.height)];
-        imgView.showActivityIndicator = YES;
+        UIImageView* imgView = [[UIImageView alloc] initWithFrame: CGRectMake(0, 0, frame.size.width, frame.size.height)];
         
         imgView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [self addSubview: imgView];
@@ -42,47 +41,44 @@
 }
 
 - (void) dealloc {
-    [[AsyncImageLoader sharedLoader] cancelLoadingURL: [NSURL URLWithString: self.imageModel.thumbURL]
-                                               target: self
-                                               action: @selector(imageLoaded:)];
+    [self.imageView cancelCurrentImageLoad];
 }
 
 - (void) setImageModel:(SearchResult *)imageModel {
     if( _imageModel ) {
-        [[AsyncImageLoader sharedLoader] cancelLoadingURL: [NSURL URLWithString: self.imageModel.thumbURL]
-                                                   target: self
-                                                   action: @selector(imageLoaded:)];
+        [self.imageView cancelCurrentImageLoad];
     }
     
     _imageModel = imageModel;
     
     if( imageModel ) {
-        [[AsyncImageLoader sharedLoader] loadImageWithURL: [NSURL URLWithString: imageModel.thumbURL]
-                                                   target: self
-                                                   action: @selector(imageLoaded:)];
+        
+        [self.imageView setImageWithURL: [NSURL URLWithString: imageModel.thumbURL]
+                       placeholderImage: [UIImage imageNamed: @"bubble"]
+                                success: ^(UIImage *image) {
+                                    dispatch_async(dispatch_get_main_queue(), ^{
+                                        
+                                        
+                                        GPUImageBubbleFilter* filter = [GPUImageBubbleFilter new];
+                                        
+                                        //UIImage* overlay = [UIImage imageNamed: @"bubble"];
+                                        
+                                        GPUImagePicture* contentPicture = [[GPUImagePicture alloc] initWithImage: image];
+                                        //GPUImagePicture* overlayPicture = [[GPUImagePicture alloc] initWithImage: overlay];
+                                        
+                                        [contentPicture addTarget: filter];
+                                        [contentPicture processImage];
+                                        //[overlayPicture addTarget: filter];
+                                        //[overlayPicture processImage];
+                                        
+                                        self.imageView.image = [filter imageFromCurrentlyProcessedOutput];
+                                        
+                                    });
+                                } failure:^(NSError *error) {
+                                    
+                                }];
     }
 }
 
-- (void) imageLoaded: (UIImage*) img {
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        
-        GPUImageBubbleFilter* filter = [GPUImageBubbleFilter new];
-        
-        UIImage* overlay = [UIImage imageNamed: @"bubble"];
-        
-        GPUImagePicture* contentPicture = [[GPUImagePicture alloc] initWithImage: img];
-        GPUImagePicture* overlayPicture = [[GPUImagePicture alloc] initWithImage: overlay];
-        
-        [contentPicture addTarget: filter];
-        [contentPicture processImage];
-        [overlayPicture addTarget: filter];
-        [overlayPicture processImage];
-        
-        self.imageView.image = [filter imageFromCurrentlyProcessedOutput];
- 
-    });
-}
 
 @end

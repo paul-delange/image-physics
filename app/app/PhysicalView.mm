@@ -9,34 +9,6 @@
 #import "PhysicalView.h"
 #import <QuartzCore/QuartzCore.h>
 
-
-class QueryCallback : public b2QueryCallback {
-public:
-    b2Vec2 m_point;
-    b2Body* m_object;
-    
-    QueryCallback(const b2Vec2& point) {
-        m_point = point;
-        m_object = NULL;
-    }
-    
-    bool ReportFixture(b2Fixture* fixture)
-    {
-        if (fixture->IsSensor()) return true; //ignore sensors
-        
-        bool inside = fixture->TestPoint(m_point);
-        if (inside)
-        {
-            // We are done, terminate the query.
-            m_object = fixture->GetBody();
-            return false;
-        }
-        
-        // Continue the query.
-        return true;
-    }
-};
-
 @interface PhysicalView () {
     b2Vec2 m_mouseWorld;
     b2MouseJoint* m_mouseJoint;
@@ -52,12 +24,6 @@ public:
     self = [super initWithFrame:frame];
     if (self) {
         m_mouseJoint = NULL;
-        /*// Initialization code
-        [self.layer addObserver: self
-                     forKeyPath: @"position"
-                        options: NSKeyValueObservingOptionNew
-                        context: nil];
-         */
     }
     return self;
 }
@@ -66,18 +32,10 @@ public:
     b2World* world = self->body->GetWorld();
     world->DestroyBody(self->body);
 }
-/*
-- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    NSValue* value = [change objectForKey: NSKeyValueChangeNewKey];
-    CGPoint point = [value CGPointValue];
-    
-    b2Vec2 position = b2Vec2(point.x, self.superview.frame.size.height-point.y);
-    if( self.body )
-        self.body->SetTransform(position, 0);
-}
-*/
 
 - (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    [super touchesBegan: touches withEvent: event];
+    
     UITouch* aTouch = [touches anyObject];
     CGPoint location = [aTouch locationInView: self.superview];
     
@@ -85,14 +43,7 @@ public:
     if( m_mouseJoint != NULL )
         return;
     
-    //b2AABB aabb;
-    //b2Vec2 d = b2Vec2(10, 10);
-    //aabb.lowerBound = m_mouseWorld - d;
-    //aabb.upperBound = m_mouseWorld + d;
-    
-    //QueryCallback callback(m_mouseWorld);
     b2World* world = self->body->GetWorld();
-    //world->QueryAABB(&callback, aabb);
     
     b2Body* bodyz = self->body;
     if( bodyz ) {
@@ -105,13 +56,15 @@ public:
         md.bodyA = groundBody;
         md.bodyB = bodyz;
         md.target = m_mouseWorld;
-        md.maxForce = 100000000 * bodyz->GetMass();
+        md.maxForce = MAXFLOAT;
         
         m_mouseJoint = (b2MouseJoint*)world->CreateJoint(&md);
     }
 }
 
 - (void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+    [super touchesMoved: touches withEvent: event];
+    
     UITouch* aTouch = [touches anyObject];
     CGPoint location = [aTouch locationInView: self.superview];
     
@@ -123,10 +76,16 @@ public:
 }
 
 - (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    [self touchesCancelled: touches withEvent: event];
+    [super touchesEnded: touches withEvent: event];
+    if( m_mouseJoint ) {
+        b2World* world = self->body->GetWorld();
+        world->DestroyJoint(m_mouseJoint);
+        m_mouseJoint = NULL;
+    }
 }
 
 - (void) touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+    [super touchesCancelled: touches withEvent: event];
     if( m_mouseJoint ) {
         b2World* world = self->body->GetWorld();
         world->DestroyJoint(m_mouseJoint);

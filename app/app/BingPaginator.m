@@ -17,8 +17,6 @@ static NSUInteger BingPaginatorDefaultPerPage = 25;
 
 + (id) paginatorWithPattern: (NSString*) pattern;
 - (id)initWithPattern:(NSString*) pattern;
-- (BOOL) hasNextPage;
-- (BOOL) hasPreviousPage;
 
 @property (nonatomic, readonly) NSUInteger currentOffset;
 @property (nonatomic, strong) NSString* pattern;
@@ -57,7 +55,15 @@ static NSUInteger BingPaginatorDefaultPerPage = 25;
 }
 
 - (BOOL) hasNextPage {
-    return self.currentOffset + self.perPage < self.objectCount;
+    if( self.perPage ) {
+        BOOL lessThan5Pages = ( self.currentOffset / self.perPage ) < 3;
+        BOOL hasMore = self.currentOffset + self.perPage < self.objectCount;
+        return lessThan5Pages && hasMore;
+    }
+    else {
+        return NO;
+    }
+    //return ;
 }
 
 - (BOOL) hasPreviousPage {

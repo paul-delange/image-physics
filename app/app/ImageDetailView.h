@@ -13,6 +13,7 @@
 @interface ImageDetailView : UIView
 
 @property (nonatomic, strong) SearchResult* imageModel;
+@property (weak, nonatomic) IBOutlet UIImageView *imageView;
 
 - (void) showFromPoint: (CGPoint) point;
 - (void) dismissToPoint: (CGPoint) point;

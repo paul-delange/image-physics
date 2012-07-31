@@ -32,9 +32,12 @@ static NSUInteger BingPaginatorDefaultPerPage = 25;
 @synthesize objectCount;
 
 + (id) paginatorWithSearchTerm: (NSString*) searchTerm {
+
+    //Comply with new standard
+    searchTerm = [NSString stringWithFormat: @"'%@'", searchTerm];
     
     NSString* urlEncoded = [searchTerm stringByAddingURLEncoding];
-    NSString* pattern = [NSString stringWithFormat: @"/json.aspx?AppId=EADA47E8862F8D8EE67D68882289189A2115F6AA&Sources=Image&Query=%@&Image.Count=:perPage&Image.Offset=:currentOffset", urlEncoded];
+    NSString* pattern = [NSString stringWithFormat: @"https://api.datamarket.azure.com/Bing/Search/v1/Image?$format=JSON&Query=%@&$top=:perPage&$skip=:currentOffset", urlEncoded];
     
     return [self paginatorWithPattern: pattern];
 }
@@ -79,19 +82,42 @@ static NSUInteger BingPaginatorDefaultPerPage = 25;
 }
 
 - (void) loadPageAtOffset: (NSUInteger) offset {
-    currentOffset = offset;
-
     NSString* resPath = [self.pattern interpolateWithObject: self];
     
-    RKObjectLoader* objectLoader = [[RKObjectManager sharedManager] loaderWithResourcePath: resPath];
+    RKObjectManager* manager = [RKObjectManager sharedManager];
     
-    if( [self.delegate respondsToSelector: @selector(configureObjectLoader:)])
-        [self.delegate configureObjectLoader: objectLoader];
-
-    objectLoader.method = RKRequestMethodGET;
-    objectLoader.delegate = self;
+    [manager loadObjectsAtResourcePath: resPath usingBlock: ^(RKObjectLoader *loader) {
+        RKObjectMappingProvider* provider =[RKObjectMappingProvider mappingProvider];
+        RKManagedObjectStore* store = manager.objectStore;
+        
+        RKManagedObjectMapping* resultMapping = [RKManagedObjectMapping mappingForClass: NSClassFromString(@"SearchResult")
+                                                                   inManagedObjectStore: store];
+        
+        //Configure result mapping
+        resultMapping.primaryKeyAttribute = @"mediaURL";
+        
+        [resultMapping mapKeyPathsToAttributes:
+         @"Title", @"title",
+         @"MediaUrl", @"mediaURL",
+         @"Thumbnail.MediaUrl", @"thumbURL",
+         @"ContentType", @"contentType",
+         @"Width", @"width",
+         @"Height", @"height",
+         @"SourceUrl", @"SourceUrl",
+         @"Index", @"index",
+         @"Term", @"term",
+         nil];
+        
+        [provider setMapping: resultMapping forKeyPath: @"d.results"];
+        
+        loader.mappingProvider = provider;
+        loader.additionalHTTPHeaders = [NSDictionary dictionaryWithObject: @"gzip" forKey: @"Accept-Encoding"];
+        loader.username = @"";
+        loader.password = @"yzGk1Quap+96/41Zjof9TOaAqzdDTRzBieJy8E+04Ms=";
+        loader.delegate = self;
+    }];
     
-    [objectLoader send];
+    currentOffset = offset;
 }
 
 #pragma mark - RKObjectLoaderDelegate
@@ -108,16 +134,40 @@ static NSUInteger BingPaginatorDefaultPerPage = 25;
 }
 
 - (void) objectLoader:(RKObjectLoader *)loader willMapData:(inout __autoreleasing id *)mappableData {
-    NSError* error = nil;
-    RKObjectMappingProvider* provider = [RKObjectManager sharedManager].mappingProvider;
-    RKObjectMapping* mapping = provider.paginationMapping;
     
-    RKObjectMappingOperation* operation = [RKObjectMappingOperation mappingOperationFromObject: *mappableData
-                                                                                      toObject: self
-                                                                                   withMapping: mapping];
-    BOOL success = [operation performMapping: &error];
-    if(!success) {
+    NSMutableDictionary* d = [[*mappableData objectForKey: @"d"] mutableCopy];
+    NSArray* results = [d objectForKey: @"results"];
+    NSMutableArray* outResults = [NSMutableArray array];
+    
+    for(NSDictionary* result in results) {
+        NSMutableDictionary* mutable = [result mutableCopy];
+        
+        NSString* uri = [result valueForKeyPath: @"__metadata.uri"];
+        NSDictionary* params = [uri queryParameters];
+        NSNumber* index = [params objectForKey: @"$skip"];
+        NSString* term = [params objectForKey: @"Query"];
+        
+        //Get the term back
+        term = [term stringByTrimmingCharactersInSet: [NSCharacterSet characterSetWithCharactersInString: @"'"]];
+        
+        [mutable setObject: index forKey: @"Index"];
+        [mutable setObject: term forKey: @"Term"];
+        
+        [outResults addObject: mutable];
+    }
+    
+    [d setObject: outResults forKey: @"results"];
+    [*mappableData setObject: d forKey: @"d"];
+    
+    NSString* next = [d objectForKey: @"__next"];
+    
+    if(!next) {
         currentOffset = 0;
+    }
+    else {
+        NSDictionary* params = [next queryParameters];
+        perPage = [[params objectForKey: @"$top"] intValue];
+        currentOffset = [[params objectForKey: @"$skip"] intValue];
     }
 }
 

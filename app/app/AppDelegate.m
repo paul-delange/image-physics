@@ -17,9 +17,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+
     
     // Override point for customization after application launch.
-    RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURLString: @"http://api.bing.net"];
+    RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURLString: @"http://www.talldevelopments.com"];
     manager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename: @"Database.sqlite"];
     configureRestKit(manager);
     

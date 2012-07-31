@@ -10,6 +10,7 @@
 
 #import "SearchResult.h"
 #import "BingPaginator.h"
+#import "AssetsPaginator.h"
 #import "InAppPurchaseProvider.h"
 
 #import "PhysicalImageView.h"
@@ -20,9 +21,12 @@
 #import "RoundMenuView.h"
 #import "ImageDetailView.h"
 
+#import <iCarousel/iCarousel.h>
 #import <Box2D/Box2D.h>
 #import <CoreData/CoreData.h>
 #import <QuartzCore/QuartzCore.h>
+#import <SDWebImage/SDImageCache.h>
+#import <SDWebImage/UIImageView+WebCache.h>
 #import <RestKit/RestKit.h>
 
 #define kRADIAL_GRAVITY_FORCE 250000000.f
@@ -30,7 +34,7 @@
 
 #define kAlertViewPaginatedDownload 1298
 
-@interface ViewController () <NSFetchedResultsControllerDelegate, UITextFieldDelegate, UIAlertViewDelegate> {
+@interface ViewController () <NSFetchedResultsControllerDelegate, UITextFieldDelegate, UIAlertViewDelegate, iCarouselDataSource> {
     b2World* world;
     b2Fixture* magnetFixture;
     NSTimer* tickTimer;
@@ -55,6 +59,7 @@
 @synthesize infoButton;
 @synthesize searchbutton;
 @synthesize moreButton;
+@synthesize engineButton;
 @synthesize searchField;
 @synthesize fadeWorldView;
 @synthesize loadingView;
@@ -152,6 +157,7 @@
     [self setWorldCanvas:nil];
     [self setLoadingView:nil];
     [self setMoreButton:nil];
+    [self setEngineButton:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     [tickTimer invalidate];
@@ -332,7 +338,7 @@
 - (NSFetchedResultsController*) resultsController {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        resultsController = [SearchResult fetchAllSortedBy: @"mediaURL"
+        resultsController = [SearchResult fetchAllSortedBy: @"index"
                                                  ascending: YES
                                              withPredicate: nil
                                                    groupBy: nil];
@@ -351,6 +357,8 @@
       newIndexPath:(NSIndexPath *)newIndexPath {
     switch (type) {
         case NSFetchedResultsChangeInsert:
+        case NSFetchedResultsChangeUpdate:
+        case NSFetchedResultsChangeMove:
         {
             if( ![self.displayedImagePaths containsObject: [anObject valueForKeyPath: @"mediaURL"]] ) {
                 PhysicalImageView* v = [[PhysicalImageView alloc] initWithFrame: CGRectMake(0, 0, 75, 75)];
@@ -363,12 +371,6 @@
         default:
             break;
     }
-}
-
-- (void)controller:(NSFetchedResultsController *)controller 
-  didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo 
-           atIndex:(NSUInteger)sectionIndex 
-     forChangeType:(NSFetchedResultsChangeType)type {
 }
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
@@ -388,6 +390,18 @@
     self.paginator.onDidLoadObjectsAtOffset = ^(NSArray* objs, NSUInteger offset) {
         [self.loadingView stopAnimating];
         
+        /*
+        NSArray* results = [objs filteredArrayUsingPredicate: [NSPredicate predicateWithFormat: @"self isKindOfClass: %@", [SearchResult class]]];
+        
+        for(id anObject in results) {
+        if( ![self.displayedImagePaths containsObject: [anObject valueForKeyPath: @"mediaURL"]] ) {
+            PhysicalImageView* v = [[PhysicalImageView alloc] initWithFrame: CGRectMake(0, 0, 75, 75)];
+            v.imageModel = anObject;
+            [self addPhysicalBodyForView: v];
+        }
+        }
+         
+         */
         if( [self.paginator hasNextPage] ) {
             [UIView animateWithDuration: 0.3
                              animations: ^{
@@ -479,12 +493,7 @@
     }
     
     if( detailView ) {
-        NSPredicate* imageViewPredicate = [NSPredicate predicateWithFormat: @"(self isKindOfClass: %@) AND self.imageModel = %@", [PhysicalImageView class], detailView.imageModel];
-        NSArray* imageViews = [self.worldCanvas.subviews filteredArrayUsingPredicate: imageViewPredicate];
-        PhysicalImageView* physicalView = [imageViews lastObject];
-        
-        CGPoint center = [self.view convertPoint: physicalView.center fromView: self.worldCanvas];
-        [detailView dismissToPoint: center];
+        [detailView dismissToPoint: CGPointMake(self.view.bounds.size.width/2.f, self.view.bounds.size.height/2.f)];
     }
 }
 
@@ -501,6 +510,14 @@
     }
     
 #endif
+}
+
+- (IBAction)enginePushedDown:(UIButton *)sender {
+    
+}
+
+- (IBAction)engineReleased:(UIButton *)sender {
+    
 }
 
 - (IBAction) playPushed:(id)sender {
@@ -553,7 +570,7 @@
                                                                      owner: self
                                                                    options: nil] lastObject];
         detailView.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height);
-        detailView.imageModel = view.imageModel;
+        detailView.carousel.dataSource = self;
         
         [self.view addSubview: detailView];
         [detailView showFromPoint: [self.view convertPoint: view.center fromView: self.worldCanvas]];
@@ -584,10 +601,11 @@
                          CGFloat xOffset = self.searchField.frame.origin.x;
                          
                          CGRect searchBarFrame = self.searchField.frame;
-                         searchBarFrame.size.width = self.view.bounds.size.width - xOffset;
+                         searchBarFrame.size.width = self.view.bounds.size.width - xOffset - self.engineButton.bounds.size.width - 20;
                          
                          self.searchField.frame = searchBarFrame;
                          self.searchField.alpha = 1.f;
+                         self.engineButton.alpha = 1.f;
                      } completion: ^(BOOL finished) {
                          
                      }];
@@ -608,9 +626,51 @@
                          
                          self.searchField.frame = searchBarFrame;
                          self.searchField.alpha = 0.f;
+                         self.engineButton.alpha = 0.f;
+                         
                      } completion: ^(BOOL finished) {
                          
                      }];
 }
+
+#pragma mark - iCarouselDataSource
+- (NSUInteger)numberOfItemsInCarousel:(iCarousel *)carousel {
+    return [self.displayedImagePaths count];
+}
+
+- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view {
+    
+    UIImageView* cast = (UIImageView*)view;
+    
+    if( !cast ) {
+        cast = [[UIImageView alloc] initWithFrame: CGRectMake(0, 0, carousel.bounds.size.width/2.f, carousel.bounds.size.height/2.f)];
+        cast.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    }
+    
+    
+    SearchResult* imageModel = [[self resultsController] objectAtIndexPath: [NSIndexPath indexPathForRow: index inSection: 0]];
+    
+    UIImage* cachedThumb = [[SDImageCache sharedImageCache] imageFromKey: imageModel.thumbURL];
+    
+    UIActivityIndicatorView* activityIndicator = nil;
+    
+    if( !cachedThumb ) {
+        activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleWhiteLarge];
+        [activityIndicator startAnimating];
+        activityIndicator.center = CGPointMake(view.bounds.size.width/2.f, view.bounds.size.height/2.f);
+        [cast addSubview: activityIndicator];
+    }
+    
+    [cast setImageWithURL: [NSURL URLWithString: imageModel.mediaURL]
+         placeholderImage: cachedThumb 
+                            success: ^(UIImage *image) {
+                                [activityIndicator removeFromSuperview];
+                            } failure: ^(NSError *error) {
+                                [activityIndicator removeFromSuperview];
+                            }];
+    
+    return cast;
+}
+
 
 @end

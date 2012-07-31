@@ -10,7 +10,7 @@
 
 @interface AssetsPaginator : NSObject <Paginator>
 
-//http://stackoverflow.com/questions/7570903/iphone-alassetslibrary-get-all-images-and-edit
-//http://developer.apple.com/library/ios/#DOCUMENTATION/AssetsLibrary/Reference/ALAssetsLibrary_Class/Reference/Reference.html
+@property (nonatomic, readonly) NSUInteger perPage;
+@property (nonatomic, readonly) NSUInteger objectCount;
 
 @end

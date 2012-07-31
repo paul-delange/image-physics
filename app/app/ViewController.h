@@ -17,6 +17,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *infoButton;
 @property (weak, nonatomic) IBOutlet UIButton *searchbutton;
 @property (weak, nonatomic) IBOutlet UIButton *moreButton;
+@property (weak, nonatomic) IBOutlet UIButton *engineButton;
 @property (weak, nonatomic) IBOutlet UITextField *searchField;
 @property (weak, nonatomic) IBOutlet UIView *fadeWorldView;
 @property (weak, nonatomic) IBOutlet LoadingView *loadingView;
@@ -28,5 +29,7 @@
 - (IBAction)searchPushed:(id)sender;
 - (IBAction)closeDetailsPushed:(id)sender;
 - (IBAction)morePushed:(UIButton *)sender;
+- (IBAction)enginePushedDown:(UIButton *)sender;
+- (IBAction)engineReleased:(UIButton *)sender;
 
 @end

@@ -9,11 +9,11 @@
 #import <UIKit/UIKit.h>
 
 @class SearchResult;
+@class iCarousel;
 
 @interface ImageDetailView : UIView
 
-@property (nonatomic, strong) SearchResult* imageModel;
-@property (weak, nonatomic) IBOutlet UIImageView *imageView;
+@property (weak, nonatomic) IBOutlet iCarousel *carousel;
 
 - (void) showFromPoint: (CGPoint) point;
 - (void) dismissToPoint: (CGPoint) point;

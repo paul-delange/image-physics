@@ -9,34 +9,9 @@
 #import <RestKit/RestKit.h>
 
 void configureRestKit(RKObjectManager* manager) {
-    //Docs: http://msdn.microsoft.com/en-us/library/dd251094
-    //Example: http://api.bing.net/json.aspx?AppId=EADA47E8862F8D8EE67D68882289189A2115F6AA&Query=car&Sources=Image&Image.Count=50
+    //Docs: https://datamarket.azure.com/dataset/bing/search#schema
+    //Example: https://api.datamarket.azure.com/Bing/Search/Image?Query=%27america%27&$top=10&$format=json
     
-    RKObjectMappingProvider* provider = manager.mappingProvider;
-    RKManagedObjectStore* store = manager.objectStore;
-    
-    RKManagedObjectMapping* searchMapping = [RKManagedObjectMapping mappingForClass: NSClassFromString(@"SearchResponse")
-                                                               inManagedObjectStore: store];
-    RKManagedObjectMapping* resultMapping = [RKManagedObjectMapping mappingForClass: NSClassFromString(@"SearchResult")
-                                                               inManagedObjectStore: store];
-    RKObjectMapping* paginatorMapping = [RKObjectMapping mappingForClass: NSClassFromString(@"BingPaginator")];
-    
-    //Configure search mapping
-    [searchMapping mapKeyPath: @"Query.SearchTerms" toAttribute: @"term"];
-    [searchMapping mapKeyPath: @"Image.Results" toRelationship: @"results" withMapping: resultMapping];
-    
-    //Configure result mapping
-    [resultMapping mapKeyPathsToAttributes:
-     @"Title", @"title",
-     @"MediaUrl", @"mediaURL",
-     @"Thumbnail.Url", @"thumbURL",
-     nil];
-    
-    //Configure pagination
-    [paginatorMapping mapKeyPath: @"SearchResponse.Image.Total" toAttribute: @"objectCount"];
-    [paginatorMapping mapKeyPath: @"SearchResponse.Image.Offset" toAttribute: @"currentOffset"];
-    
-    provider.paginationMapping = paginatorMapping;
-    
-    [provider setMapping: searchMapping forKeyPath: @"SearchResponse"];
+    RKLogConfigureByName("RestKit/Network", RKLogLevelDebug);
+    RKLogConfigureByName("RestKit/ObjectMapping", RKLogLevelDebug);
 }

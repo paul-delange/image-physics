@@ -20,3 +20,6 @@
 [submodule "SDWebImage"]
 	path = SDWebImage
 	url = https://github.com/rs/SDWebImage.git
+[submodule "iCarousel"]
+	path = iCarousel
+	url = https://github.com/nicklockwood/iCarousel

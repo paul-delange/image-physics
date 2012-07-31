@@ -10,12 +10,12 @@
 
 #import "SearchResult.h"
 
+#import <iCarousel/iCarousel.h>
 #import <SDWebImage/SDImageCache.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 
 @implementation ImageDetailView
-@synthesize imageModel = _imageModel;
-@synthesize imageView;
+@synthesize carousel;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -29,10 +29,12 @@
 - (id) initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder: aDecoder];
     if( self ) {
+        self.carousel.type = iCarouselTypeTimeMachine;
     }
     return self;
 }
 
+/*
 - (void) setImageModel:(SearchResult *)imageModel {
     _imageModel = imageModel;
     
@@ -62,7 +64,7 @@
                                     [activityIndicator removeFromSuperview];
                                 }];
     }
-}
+}*/
 
 - (void) showFromPoint: (CGPoint) point {
     CGRect finalBounds = self.bounds;

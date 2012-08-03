@@ -28,6 +28,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import <SDWebImage/SDImageCache.h>
 #import <SDWebImage/UIImageView+WebCache.h>
+#import <SVProgressHUD/SVProgressHUD.h>
 #import <RestKit/RestKit.h>
 
 #define kRADIAL_GRAVITY_FORCE 250000000.f
@@ -376,7 +377,7 @@
 - (NSFetchedResultsController*) resultsController {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        resultsController = [SearchResult fetchAllSortedBy: @"index"
+        resultsController = [SearchResult fetchAllSortedBy: @"mediaURL"
                                                  ascending: YES
                                              withPredicate: nil
                                                    groupBy: nil];
@@ -680,6 +681,20 @@
 }
 
 - (IBAction)screenshotPushed:(UIButton *)sender {
+    
+    NSString* msg = NSLocalizedString(@"Saving screenshot", @"");
+    [SVProgressHUD showWithStatus: msg maskType: SVProgressHUDMaskTypeGradient];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        CGSize imageSize = self.worldCanvas.bounds.size;
+        UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0);
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        [self.worldCanvas.layer renderInContext:context];
+        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
+    });
 }
 
 
@@ -741,6 +756,25 @@
     
     if( [identifier isEqualToString: kProductIdentifierPaginatedSearches] ) {
         [self morePushed: self.moreButton];
+    }
+}
+
+- (void) image: (UIImage*) image didFinishSavingWithError: (NSError*) error contextInfo: (void*) contextInfo {
+    if( error ) {
+        NSString* msg = NSLocalizedString(@"Saving of screenshot failed", @"");
+        
+        [SVProgressHUD showErrorWithStatus: msg];
+    }
+    else {
+        NSString* msg = nil;
+        
+        if( [UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeCamera] )
+            msg = NSLocalizedString(@"A screenshot has been saved to your Camera Roll album", @"");
+        else
+            msg = NSLocalizedString(@"A screenshot has been saved to your Saved Photos album", @"");
+        
+        
+        [SVProgressHUD showSuccessWithStatus: msg];
     }
 }
 

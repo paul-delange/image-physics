@@ -105,15 +105,14 @@ NSString* kLocalAlbumSearchEngine = @"ALAssetsLibrary";
         ALAsset* asset = [self.photoAssets objectAtIndex: idx];
         ALAssetRepresentation* representation = [asset defaultRepresentation];
         NSString* url = [[representation url] absoluteString];
-        //CGImageRef fullImg = [representation fullResolutionImage];
+        CGImageRef fullImg = [representation fullResolutionImage];
         
         SearchResult* entity = [SearchResult findFirstByAttribute: @"mediaURL" withValue: url];
         if( !entity )
             entity = [SearchResult createEntity];
         
-        //entity.height = [NSNumber numberWithFloat: CGImageGetHeight(fullImg)];
-        //entity.width = [NSNumber numberWithFloat: CGImageGetWidth(fullImg)];
-        entity.index = [NSNumber numberWithInt: self.currentOffset + idx];
+        entity.height = [NSNumber numberWithFloat: CGImageGetHeight(fullImg)];
+        entity.width = [NSNumber numberWithFloat: CGImageGetWidth(fullImg)];
         entity.mediaURL = url;
         entity.thumbURL = url;
         

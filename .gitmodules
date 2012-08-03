@@ -23,3 +23,6 @@
 [submodule "iCarousel"]
 	path = iCarousel
 	url = https://github.com/nicklockwood/iCarousel
+[submodule "SVProgressHUD"]
+	path = SVProgressHUD
+	url = https://github.com/samvermette/SVProgressHUD.git

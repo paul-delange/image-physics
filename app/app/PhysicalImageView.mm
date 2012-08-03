@@ -73,7 +73,7 @@
                                   [contentPicture addTarget: filter];
                                   [contentPicture processImage];
                                   
-                                  self.imageView.image = [filter imageFromCurrentlyProcessedOutput];
+                                  self.imageView.image = [filter imageFromCurrentlyProcessedOutputWithOrientation: UIImageOrientationUp];
                                   
                               });
                               

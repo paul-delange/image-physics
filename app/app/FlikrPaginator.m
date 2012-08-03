@@ -59,7 +59,7 @@ NSString* kFlikrSearchEngine = @"http://api.flickr.com/services";
 
 - (BOOL) hasNextPage {
     if( self.perPage ) {
-        BOOL lessThan5Pages = ( self.currentOffset / self.perPage ) < 3;
+        BOOL lessThan5Pages = self.currentOffset < 3;
         BOOL hasMore = self.currentOffset + self.perPage < self.objectCount;
         return lessThan5Pages && hasMore;
     }

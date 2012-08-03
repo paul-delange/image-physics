@@ -105,8 +105,6 @@ NSString* kBingSearchEngine = @"api.datamarket.azure.com";
          @"Width", @"width",
          @"Height", @"height",
          @"SourceUrl", @"SourceUrl",
-         @"Index", @"index",
-         @"Term", @"term",
          nil];
         
         [provider setMapping: resultMapping forKeyPath: @"d.results"];
@@ -136,30 +134,7 @@ NSString* kBingSearchEngine = @"api.datamarket.azure.com";
 
 - (void) objectLoader:(RKObjectLoader *)loader willMapData:(inout __autoreleasing id *)mappableData {
     
-    NSMutableDictionary* d = [[*mappableData objectForKey: @"d"] mutableCopy];
-    NSArray* results = [d objectForKey: @"results"];
-    NSMutableArray* outResults = [NSMutableArray array];
-    
-    for(NSDictionary* result in results) {
-        NSMutableDictionary* mutable = [result mutableCopy];
-        
-        NSString* uri = [result valueForKeyPath: @"__metadata.uri"];
-        NSDictionary* params = [uri queryParameters];
-        NSNumber* index = [params objectForKey: @"$skip"];
-        NSString* term = [params objectForKey: @"Query"];
-        
-        //Get the term back
-        term = [term stringByTrimmingCharactersInSet: [NSCharacterSet characterSetWithCharactersInString: @"'"]];
-        
-        [mutable setObject: index forKey: @"Index"];
-        [mutable setObject: term forKey: @"Term"];
-        
-        [outResults addObject: mutable];
-    }
-    
-    [d setObject: outResults forKey: @"results"];
-    [*mappableData setObject: d forKey: @"d"];
-    
+    NSMutableDictionary* d = [*mappableData objectForKey: @"d"];
     NSString* next = [d objectForKey: @"__next"];
     
     if(!next) {

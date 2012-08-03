@@ -38,6 +38,10 @@
 		5209EAC215BD7647005A0983 /* ImageDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5209EAC015BD7647005A0983 /* ImageDetailView.m */; };
 		5209EAC415BD768E005A0983 /* ImageDetailView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5209EAC315BD768E005A0983 /* ImageDetailView.xib */; };
 		5209EAC515BD768E005A0983 /* ImageDetailView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5209EAC315BD768E005A0983 /* ImageDetailView.xib */; };
+		52102ED515CBFE68003C4115 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 52102ED415CBFE68003C4115 /* SVProgressHUD.m */; };
+		52102ED615CBFE68003C4115 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 52102ED415CBFE68003C4115 /* SVProgressHUD.m */; };
+		52102ED815CBFE70003C4115 /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 52102ED715CBFE70003C4115 /* SVProgressHUD.bundle */; };
+		52102ED915CBFE70003C4115 /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 52102ED715CBFE70003C4115 /* SVProgressHUD.bundle */; };
 		524E69DB15C0074500374314 /* LoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 524E69DA15C0074500374314 /* LoadingView.m */; };
 		524E69DC15C0074500374314 /* LoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 524E69DA15C0074500374314 /* LoadingView.m */; };
 		524E69DF15C0145F00374314 /* bubble@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 524E69DE15C0145F00374314 /* bubble@2x.png */; };
@@ -145,6 +149,8 @@
 		5209EABF15BD7647005A0983 /* ImageDetailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageDetailView.h; sourceTree = "<group>"; };
 		5209EAC015BD7647005A0983 /* ImageDetailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageDetailView.m; sourceTree = "<group>"; };
 		5209EAC315BD768E005A0983 /* ImageDetailView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageDetailView.xib; sourceTree = "<group>"; };
+		52102ED415CBFE68003C4115 /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SVProgressHUD.m; path = ../SVProgressHUD/SVProgressHUD/SVProgressHUD.m; sourceTree = "<group>"; };
+		52102ED715CBFE70003C4115 /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = SVProgressHUD.bundle; path = ../SVProgressHUD/SVProgressHUD/SVProgressHUD.bundle; sourceTree = "<group>"; };
 		524E69D915C0074500374314 /* LoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingView.h; sourceTree = "<group>"; };
 		524E69DA15C0074500374314 /* LoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingView.m; sourceTree = "<group>"; };
 		524E69DE15C0145F00374314 /* bubble@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bubble@2x.png"; sourceTree = "<group>"; };
@@ -321,6 +327,21 @@
 			name = "Physical Views";
 			sourceTree = "<group>";
 		};
+		52102ED215CBF7A1003C4115 /* Paginators */ = {
+			isa = PBXGroup;
+			children = (
+				52F773E815B58868006D416F /* BingPaginator.h */,
+				52F773E915B58868006D416F /* BingPaginator.m */,
+				52FEE82F15BFDDC800552FAD /* AssetsPaginator.h */,
+				52FEE83015BFDDC800552FAD /* AssetsPaginator.m */,
+				52FEE83315BFDDE400552FAD /* Paginator.h */,
+				52FEE83415BFDDE400552FAD /* Paginator.m */,
+				52F77A3115CBB63500358F1D /* FlikrPaginator.h */,
+				52F77A3215CBB63500358F1D /* FlikrPaginator.m */,
+			);
+			name = Paginators;
+			sourceTree = "<group>";
+		};
 		52AF9A5615B42972008FC1CC /* Mogenerator */ = {
 			isa = PBXGroup;
 			children = (
@@ -446,6 +467,7 @@
 		DA7726E115B2E6A7008195A1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				52102ED715CBFE70003C4115 /* SVProgressHUD.bundle */,
 				52BCD65715BECB4A002F73A6 /* icons */,
 				DABEF85B15BBE191003ABF29 /* Images */,
 				DA7726C915B2E69C008195A1 /* app-Info.plist */,
@@ -460,21 +482,14 @@
 		DA7726E215B2E6BD008195A1 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				52102ED215CBF7A1003C4115 /* Paginators */,
 				52F773E715B5884A006D416F /* Core Data */,
-				52F773E815B58868006D416F /* BingPaginator.h */,
-				52F773E915B58868006D416F /* BingPaginator.m */,
 				52BCD61F15BE7B11002F73A6 /* GPUImageBubbleFilter.h */,
 				52BCD62015BE7B11002F73A6 /* GPUImageBubbleFilter.m */,
 				52BCD69E15BEDFD6002F73A6 /* InAppPurchaseProvider.h */,
 				52BCD69F15BEDFD6002F73A6 /* InAppPurchaseProvider.m */,
 				52BCD6AA15BEE51F002F73A6 /* InAppPurchaseProvider+SecurityBreach.h */,
 				52BCD6AB15BEE51F002F73A6 /* InAppPurchaseProvider+SecurityBreach.m */,
-				52FEE82F15BFDDC800552FAD /* AssetsPaginator.h */,
-				52FEE83015BFDDC800552FAD /* AssetsPaginator.m */,
-				52FEE83315BFDDE400552FAD /* Paginator.h */,
-				52FEE83415BFDDE400552FAD /* Paginator.m */,
-				52F77A3115CBB63500358F1D /* FlikrPaginator.h */,
-				52F77A3215CBB63500358F1D /* FlikrPaginator.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -508,6 +523,7 @@
 		DA7726E515B2E75F008195A1 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				52102ED415CBFE68003C4115 /* SVProgressHUD.m */,
 				527DE89415C0402100CFC075 /* iCarousel.m */,
 				52BCD6BE15BEF77D002F73A6 /* UDID iOS5 */,
 				52AF9A5615B42972008FC1CC /* Mogenerator */,
@@ -621,6 +637,7 @@
 				52CAA40B15C6D51300A42F15 /* flikr@2x.png in Resources */,
 				52CAA40D15C6D51300A42F15 /* google@2x.png in Resources */,
 				52CAA40F15C6D51300A42F15 /* bing@2x.png in Resources */,
+				52102ED915CBFE70003C4115 /* SVProgressHUD.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -651,6 +668,7 @@
 				52CAA40A15C6D51300A42F15 /* flikr@2x.png in Resources */,
 				52CAA40C15C6D51300A42F15 /* google@2x.png in Resources */,
 				52CAA40E15C6D51300A42F15 /* bing@2x.png in Resources */,
+				52102ED815CBFE70003C4115 /* SVProgressHUD.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -714,6 +732,7 @@
 				524E69DC15C0074500374314 /* LoadingView.m in Sources */,
 				527DE89615C0402100CFC075 /* iCarousel.m in Sources */,
 				52F77A3415CBB63500358F1D /* FlikrPaginator.m in Sources */,
+				52102ED615CBFE68003C4115 /* SVProgressHUD.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -745,6 +764,7 @@
 				524E69DB15C0074500374314 /* LoadingView.m in Sources */,
 				527DE89515C0402100CFC075 /* iCarousel.m in Sources */,
 				52F77A3315CBB63500358F1D /* FlikrPaginator.m in Sources */,
+				52102ED515CBFE68003C4115 /* SVProgressHUD.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -902,6 +922,7 @@
 					../UDID/Classes,
 					"../GPUImage/framework/**",
 					../iCarousel,
+					../SVProgressHUD,
 				);
 				INFOPLIST_FILE = "app/app-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
@@ -932,6 +953,7 @@
 					../UDID/Classes,
 					"../GPUImage/framework/**",
 					../iCarousel,
+					../SVProgressHUD,
 				);
 				INFOPLIST_FILE = "app/app-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;

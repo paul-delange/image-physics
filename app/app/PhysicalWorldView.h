@@ -8,9 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void(^PhysicalWorldSubviewsChanged)(NSArray* subviews);
+
 @interface PhysicalWorldView : UIView
 
 @property (nonatomic, assign) BOOL paused;
+@property (nonatomic, copy) PhysicalWorldSubviewsChanged onSubviewsChanged;
 
 - (void) update: (id) sender;
 

@@ -12,6 +12,7 @@
 #import <RestKit/RKManagedObjectLoader.h>
 
 static NSUInteger BingPaginatorDefaultPerPage = 25;
+NSString* kBingSearchEngine = @"api.datamarket.azure.com";
 
 @interface BingPaginator () <RKObjectLoaderDelegate>
 

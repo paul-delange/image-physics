@@ -15,6 +15,11 @@
 
 @synthesize window = _window;
 
++ (void) initialize {
+    NSDictionary* defaultDefaults = @{ kUserDefaultSearchEngineKey : kLocalAlbumSearchEngine };
+    [[NSUserDefaults standardUserDefaults] registerDefaults: defaultDefaults];
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 

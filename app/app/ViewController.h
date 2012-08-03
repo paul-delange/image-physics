@@ -17,7 +17,13 @@
 @property (weak, nonatomic) IBOutlet UIButton *infoButton;
 @property (weak, nonatomic) IBOutlet UIButton *searchbutton;
 @property (weak, nonatomic) IBOutlet UIButton *moreButton;
-@property (weak, nonatomic) IBOutlet UIButton *engineButton;
+@property (weak, nonatomic) IBOutlet UIButton *albumButton;
+@property (weak, nonatomic) IBOutlet UIButton *googleButton;
+@property (weak, nonatomic) IBOutlet UIButton *bingButton;
+@property (weak, nonatomic) IBOutlet UIButton *flikrButton;
+@property (weak, nonatomic) IBOutlet UIButton *screenshotButton;
+@property (weak, nonatomic) IBOutlet UIButton *pauseButton;
+@property (weak, nonatomic) IBOutlet UIButton *refreshButton;
 @property (weak, nonatomic) IBOutlet UITextField *searchField;
 @property (weak, nonatomic) IBOutlet UIView *fadeWorldView;
 @property (weak, nonatomic) IBOutlet LoadingView *loadingView;
@@ -29,7 +35,9 @@
 - (IBAction)searchPushed:(id)sender;
 - (IBAction)closeDetailsPushed:(id)sender;
 - (IBAction)morePushed:(UIButton *)sender;
-- (IBAction)enginePushedDown:(UIButton *)sender;
-- (IBAction)engineReleased:(UIButton *)sender;
+- (IBAction)enginePushed:(UIButton *)sender;
+- (IBAction)screenshotPushed:(UIButton *)sender;
+- (IBAction)playPushed:(id)sender;
+- (IBAction) refreshPushed:(id)sender;
 
 @end

@@ -28,6 +28,70 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
+                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="VyO-nE-LAc" userLabel="Screenshot Button">
+                                <rect key="frame" x="658" y="894" width="100" height="100"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Screenshot">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="screenshotPushed:" destination="2" eventType="touchUpInside" id="mPz-FK-ERQ"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="08y-vv-WoH" userLabel="Pause Button">
+                                <rect key="frame" x="658" y="794" width="100" height="100"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Pause">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="playPushed:" destination="2" eventType="touchUpInside" id="nh6-uE-dDr"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="JCi-FW-h6v" userLabel="More Button">
+                                <rect key="frame" x="658" y="594" width="100" height="100"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="+">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="morePushed:" destination="2" eventType="touchUpInside" id="6pR-OL-gHV"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="5dv-bh-9Ai" userLabel="Refresh Button">
+                                <rect key="frame" x="658" y="694" width="100" height="100"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Restart">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="refreshPushed:" destination="2" eventType="touchUpInside" id="BS2-90-AUP"/>
+                                </connections>
+                            </button>
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.0" contentMode="scaleAspectFill" image="refresh@2x.png" id="Hre-Bx-Mdn" customClass="LoadingView">
+                                <rect key="frame" x="658" y="494" width="100" height="100"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                            </imageView>
                             <view alpha="0.0" contentMode="scaleToFill" id="1LU-Rb-ua2" userLabel="Fade World View">
                                 <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -48,25 +112,6 @@
                                     <action selector="infoPushed:" destination="2" eventType="touchUpInside" id="tlf-4r-gTY"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="JCi-FW-h6v" userLabel="More Button">
-                                <rect key="frame" x="648" y="894" width="100" height="100"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="+">
-                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <state key="highlighted">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="morePushed:" destination="2" eventType="touchUpInside" id="6pR-OL-gHV"/>
-                                </connections>
-                            </button>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" image="refresh@2x.png" id="Hre-Bx-Mdn" customClass="LoadingView">
-                                <rect key="frame" x="498" y="894" width="100" height="100"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                            </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Cs8-Jr-MNs" userLabel="Search Button">
                                 <rect key="frame" x="60" y="11" width="40" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -82,12 +127,12 @@
                                     <action selector="searchPushed:" destination="2" eventType="touchUpInside" id="XGL-OJ-acq"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="mt9-hu-LCD" userLabel="Engine Button">
+                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="mt9-hu-LCD" userLabel="Album Button">
                                 <rect key="frame" x="708" y="10" width="50" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                 <accessibility key="accessibilityConfiguration" label=""/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" backgroundImage="album@2x.png">
+                                <state key="normal" image="album@2x.png">
                                     <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -95,10 +140,55 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="enginePushedDown:" destination="2" eventType="touchDown" id="LCc-zp-i6S"/>
-                                    <action selector="engineReleased:" destination="2" eventType="touchCancel" id="IPf-34-k1l"/>
-                                    <action selector="engineReleased:" destination="2" eventType="touchUpOutside" id="b1s-Ca-QgY"/>
-                                    <action selector="engineReleased:" destination="2" eventType="touchUpInside" id="xC2-94-4pF"/>
+                                    <action selector="enginePushed:" destination="2" eventType="touchUpInside" id="Br4-ej-IOw"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="3W8-EN-Lki" userLabel="Google Button">
+                                <rect key="frame" x="708" y="70" width="50" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                <accessibility key="accessibilityConfiguration" label=""/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" image="google@2x.png">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="enginePushed:" destination="2" eventType="touchUpInside" id="KQu-Fc-muR"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="IaB-mU-KrA" userLabel="Bing Button">
+                                <rect key="frame" x="708" y="130" width="50" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                <accessibility key="accessibilityConfiguration" label=""/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" image="bing@2x.png">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="enginePushed:" destination="2" eventType="touchUpInside" id="dfx-nq-NsH"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="VLa-qG-PNG" userLabel="Flikr Button">
+                                <rect key="frame" x="708" y="190" width="50" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                <accessibility key="accessibilityConfiguration" label=""/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" image="flikr@2x.png">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="enginePushed:" destination="2" eventType="touchUpInside" id="TYe-ZF-2Rd"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" clearButtonMode="whileEditing" id="why-C4-bXv">
@@ -114,12 +204,18 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <connections>
-                        <outlet property="engineButton" destination="mt9-hu-LCD" id="SWG-Su-2cp"/>
+                        <outlet property="albumButton" destination="mt9-hu-LCD" id="a7Y-TB-cDC"/>
+                        <outlet property="bingButton" destination="IaB-mU-KrA" id="76C-QB-mQi"/>
                         <outlet property="fadeWorldView" destination="1LU-Rb-ua2" id="OT2-U3-A07"/>
+                        <outlet property="flikrButton" destination="VLa-qG-PNG" id="OXU-cf-qaU"/>
+                        <outlet property="googleButton" destination="3W8-EN-Lki" id="aFn-oI-GGh"/>
                         <outlet property="infoButton" destination="jen-mO-6Np" id="0r0-9r-h6N"/>
                         <outlet property="loadingView" destination="Hre-Bx-Mdn" id="2gl-PK-Aqx"/>
                         <outlet property="moreButton" destination="JCi-FW-h6v" id="Ghd-VZ-hnk"/>
+                        <outlet property="pauseButton" destination="08y-vv-WoH" id="ZMz-9M-1zc"/>
                         <outlet property="planetView" destination="iEH-16-k4P" id="hae-yi-GWb"/>
+                        <outlet property="refreshButton" destination="5dv-bh-9Ai" id="T2P-xJ-ciV"/>
+                        <outlet property="screenshotButton" destination="VyO-nE-LAc" id="fvV-XI-mhf"/>
                         <outlet property="searchField" destination="why-C4-bXv" id="1NB-lL-7yd"/>
                         <outlet property="searchbutton" destination="Cs8-Jr-MNs" id="but-4c-Itv"/>
                         <outlet property="worldCanvas" destination="fgQ-qJ-r83" id="gSe-vj-Zbm"/>
@@ -131,6 +227,9 @@
     <resources>
         <image name="album@2x.png" width="964" height="912"/>
         <image name="background.jpeg" width="1024" height="1024"/>
+        <image name="bing@2x.png" width="118" height="118"/>
+        <image name="flikr@2x.png" width="256" height="256"/>
+        <image name="google@2x.png" width="118" height="118"/>
         <image name="info@2x.png" width="230" height="241"/>
         <image name="refresh@2x.png" width="230" height="241"/>
         <image name="search@2x.png" width="230" height="241"/>
@@ -152,17 +251,25 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/ViewController.h"/>
             <relationships>
                 <relationship kind="action" name="closeDetailsPushed:"/>
-                <relationship kind="action" name="enginePushedDown:" candidateClass="UIButton"/>
-                <relationship kind="action" name="engineReleased:" candidateClass="UIButton"/>
+                <relationship kind="action" name="enginePushed:" candidateClass="UIButton"/>
                 <relationship kind="action" name="infoPushed:" candidateClass="UIButton"/>
                 <relationship kind="action" name="morePushed:" candidateClass="UIButton"/>
+                <relationship kind="action" name="playPushed:"/>
+                <relationship kind="action" name="refreshPushed:"/>
+                <relationship kind="action" name="screenshotPushed:" candidateClass="UIButton"/>
                 <relationship kind="action" name="searchPushed:"/>
-                <relationship kind="outlet" name="engineButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="albumButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="bingButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="fadeWorldView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="flikrButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="googleButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="infoButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="loadingView" candidateClass="LoadingView"/>
                 <relationship kind="outlet" name="moreButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="pauseButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="planetView" candidateClass="PlanetView"/>
+                <relationship kind="outlet" name="refreshButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="screenshotButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="searchField" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="searchbutton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="worldCanvas" candidateClass="PhysicalWorldView"/>

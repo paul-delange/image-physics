@@ -16,6 +16,7 @@
 //http://developer.apple.com/library/ios/#DOCUMENTATION/AssetsLibrary/Reference/ALAssetsLibrary_Class/Reference/Reference.html
 
 static NSUInteger AssetPaginatorDefaultPerPage = 25;
+NSString* kLocalAlbumSearchEngine = @"ALAssetsLibrary";
 
 @interface AssetsPaginator () 
 

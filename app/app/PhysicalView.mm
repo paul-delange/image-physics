@@ -50,14 +50,11 @@
         b2BodyDef bodyDef;
         b2Body* groundBody = world->CreateBody(&bodyDef);
         
-        bodyz->SetAwake(true);
-        
         b2MouseJointDef md;
         md.bodyA = groundBody;
         md.bodyB = bodyz;
         md.target = m_mouseWorld;
         md.maxForce = MAXFLOAT;
-        
         m_mouseJoint = (b2MouseJoint*)world->CreateJoint(&md);
     }
 }

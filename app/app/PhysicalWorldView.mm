@@ -17,7 +17,6 @@
 @end
 
 @implementation PhysicalWorldView
-@synthesize paused;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -50,6 +49,22 @@
         
     }
 }
+
+
+- (void) didAddSubview:(UIView *)subview {
+    [super didAddSubview: subview];
+    if(self.onSubviewsChanged)
+        self.onSubviewsChanged(self.subviews);
+}
+
+- (void) willRemoveSubview:(UIView *)subview {
+    [super willRemoveSubview: subview];
+    
+    NSArray* remaining = [self.subviews filteredArrayUsingPredicate: [NSPredicate predicateWithFormat: @"self != %@", subview]];
+    if( self.onSubviewsChanged )
+        self.onSubviewsChanged(remaining);
+}
+
 
 /*
 // Only override drawRect: if you perform custom drawing.

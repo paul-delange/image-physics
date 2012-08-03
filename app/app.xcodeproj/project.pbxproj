@@ -96,6 +96,8 @@
 		52F773E415B57B60006D416F /* SearchResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 52F773E315B57B60006D416F /* SearchResponse.m */; };
 		52F773E615B57B6B006D416F /* _SearchResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 52F773E515B57B6B006D416F /* _SearchResponse.m */; };
 		52F773EA15B58868006D416F /* BingPaginator.m in Sources */ = {isa = PBXBuildFile; fileRef = 52F773E915B58868006D416F /* BingPaginator.m */; };
+		52F77A3315CBB63500358F1D /* FlikrPaginator.m in Sources */ = {isa = PBXBuildFile; fileRef = 52F77A3215CBB63500358F1D /* FlikrPaginator.m */; };
+		52F77A3415CBB63500358F1D /* FlikrPaginator.m in Sources */ = {isa = PBXBuildFile; fileRef = 52F77A3215CBB63500358F1D /* FlikrPaginator.m */; };
 		52FEE82D15BFDD9500552FAD /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52FEE82C15BFDD9500552FAD /* AssetsLibrary.framework */; };
 		52FEE83115BFDDC800552FAD /* AssetsPaginator.m in Sources */ = {isa = PBXBuildFile; fileRef = 52FEE83015BFDDC800552FAD /* AssetsPaginator.m */; };
 		52FEE83215BFDDC800552FAD /* AssetsPaginator.m in Sources */ = {isa = PBXBuildFile; fileRef = 52FEE83015BFDDC800552FAD /* AssetsPaginator.m */; };
@@ -196,6 +198,8 @@
 		52F773E515B57B6B006D416F /* _SearchResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _SearchResponse.m; sourceTree = "<group>"; };
 		52F773E815B58868006D416F /* BingPaginator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BingPaginator.h; sourceTree = "<group>"; };
 		52F773E915B58868006D416F /* BingPaginator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BingPaginator.m; sourceTree = "<group>"; };
+		52F77A3115CBB63500358F1D /* FlikrPaginator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlikrPaginator.h; sourceTree = "<group>"; };
+		52F77A3215CBB63500358F1D /* FlikrPaginator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlikrPaginator.m; sourceTree = "<group>"; };
 		52FEE82C15BFDD9500552FAD /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		52FEE82F15BFDDC800552FAD /* AssetsPaginator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssetsPaginator.h; sourceTree = "<group>"; };
 		52FEE83015BFDDC800552FAD /* AssetsPaginator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssetsPaginator.m; sourceTree = "<group>"; };
@@ -469,6 +473,8 @@
 				52FEE83015BFDDC800552FAD /* AssetsPaginator.m */,
 				52FEE83315BFDDE400552FAD /* Paginator.h */,
 				52FEE83415BFDDE400552FAD /* Paginator.m */,
+				52F77A3115CBB63500358F1D /* FlikrPaginator.h */,
+				52F77A3215CBB63500358F1D /* FlikrPaginator.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -707,6 +713,7 @@
 				52FEE83615BFDDE400552FAD /* Paginator.m in Sources */,
 				524E69DC15C0074500374314 /* LoadingView.m in Sources */,
 				527DE89615C0402100CFC075 /* iCarousel.m in Sources */,
+				52F77A3415CBB63500358F1D /* FlikrPaginator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -737,6 +744,7 @@
 				52FEE83515BFDDE400552FAD /* Paginator.m in Sources */,
 				524E69DB15C0074500374314 /* LoadingView.m in Sources */,
 				527DE89515C0402100CFC075 /* iCarousel.m in Sources */,
+				52F77A3315CBB63500358F1D /* FlikrPaginator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

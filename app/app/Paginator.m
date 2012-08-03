@@ -7,3 +7,7 @@
 //
 
 #import "Paginator.h"
+
+//move these
+
+NSString* kGoogleSearchEngine = @"google";

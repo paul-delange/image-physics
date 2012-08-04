@@ -6,8 +6,10 @@
 const struct SearchResultAttributes SearchResultAttributes = {
 	.contentType = @"contentType",
 	.height = @"height",
+	.index = @"index",
 	.mediaURL = @"mediaURL",
 	.sourceUrl = @"sourceUrl",
+	.term = @"term",
 	.thumbURL = @"thumbURL",
 	.title = @"title",
 	.width = @"width",
@@ -47,6 +49,10 @@ const struct SearchResultFetchedProperties SearchResultFetchedProperties = {
 	
 	if ([key isEqualToString:@"heightValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"height"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+	}
+	if ([key isEqualToString:@"indexValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"index"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 	}
 	if ([key isEqualToString:@"widthValue"]) {
@@ -93,6 +99,32 @@ const struct SearchResultFetchedProperties SearchResultFetchedProperties = {
 
 
 
+@dynamic index;
+
+
+
+- (int64_t)indexValue {
+	NSNumber *result = [self index];
+	return [result longLongValue];
+}
+
+- (void)setIndexValue:(int64_t)value_ {
+	[self setIndex:[NSNumber numberWithLongLong:value_]];
+}
+
+- (int64_t)primitiveIndexValue {
+	NSNumber *result = [self primitiveIndex];
+	return [result longLongValue];
+}
+
+- (void)setPrimitiveIndexValue:(int64_t)value_ {
+	[self setPrimitiveIndex:[NSNumber numberWithLongLong:value_]];
+}
+
+
+
+
+
 @dynamic mediaURL;
 
 
@@ -101,6 +133,13 @@ const struct SearchResultFetchedProperties SearchResultFetchedProperties = {
 
 
 @dynamic sourceUrl;
+
+
+
+
+
+
+@dynamic term;
 
 
 

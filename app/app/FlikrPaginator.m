@@ -111,6 +111,11 @@ NSString* kFlikrSearchEngine = @"http://api.flickr.com/services";
         loader.delegate = self;
     }];
     
+    NSDictionary* queryParams = [resPath queryParameters];
+    
+    NSDictionary* params =@{ @"start" : [queryParams objectForKey: @"page"], @"term" : [queryParams objectForKey: @"text"] };
+    [FlurryAnalytics logEvent: @"Google search" withParameters: params];
+    
     currentOffset = offset;
 }
 

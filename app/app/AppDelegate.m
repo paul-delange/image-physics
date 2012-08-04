@@ -13,6 +13,8 @@
 
 @implementation AppDelegate
 
+//flurry: C2FZCDDC2CF4QSR53R9C
+
 @synthesize window = _window;
 
 + (void) initialize {
@@ -23,6 +25,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 
+    [FlurryAnalytics startSession: @"C2FZCDDC2CF4QSR53R9C"];
     
     // Override point for customization after application launch.
     RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURLString: @"http://www.talldevelopments.com"];

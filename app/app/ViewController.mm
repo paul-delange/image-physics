@@ -12,6 +12,7 @@
 #import "BingPaginator.h"
 #import "AssetsPaginator.h"
 #import "FlikrPaginator.h"
+#import "GooglePaginator.h"
 
 #import "InAppPurchaseProvider.h"
 
@@ -471,6 +472,8 @@
         self.paginator = [BingPaginator paginatorWithSearchTerm: searchTerm];
     else if( currentEngineButton == self.flikrButton )
         self.paginator = [FlikrPaginator paginatorWithSearchTerm: searchTerm];
+    else if( currentEngineButton == self.googleButton )
+        self.paginator = [GooglePaginator paginatorWithSearchTerm: searchTerm];
     
     self.paginator.onDidLoadObjectsAtOffset = ^(NSArray* objs, NSUInteger offset) {
         [self.loadingView stopAnimating];

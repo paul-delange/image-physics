@@ -12,6 +12,8 @@
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
 
+    #import "FlurryAnalytics.h"
+
     extern NSString* kUserDefaultSearchEngineKey;
     extern NSString* kLocalAlbumSearchEngine;
     extern NSString* kGoogleSearchEngine;

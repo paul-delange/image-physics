@@ -139,6 +139,8 @@ NSString* kLocalAlbumSearchEngine = @"ALAssetsLibrary";
         self.onDidLoadObjectsAtOffset(objs, self.currentOffset);
     }
     
+    NSDictionary* params =@{ @"start" : [NSNumber numberWithInt: offset] };
+    [FlurryAnalytics logEvent: @"Assets search" withParameters: params];
     
     self.currentOffset += (finishOffset-startOffset);
 }

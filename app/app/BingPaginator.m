@@ -116,6 +116,11 @@ NSString* kBingSearchEngine = @"api.datamarket.azure.com";
         loader.delegate = self;
     }];
     
+    NSDictionary* queryParams = [resPath queryParameters];
+    
+    NSDictionary* params =@{ @"start" : [queryParams objectForKey: @"$skip"], @"term" : [queryParams objectForKey: @"Query"] };
+    [FlurryAnalytics logEvent: @"Bing search" withParameters: params];
+    
     currentOffset = offset;
 }
 

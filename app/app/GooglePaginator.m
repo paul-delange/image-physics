@@ -35,7 +35,7 @@ static NSUInteger GooglePaginatorDefaultPerPage = 10;   //maximum
     NSString* urlEncoded = [searchTerm stringByAddingURLEncoding];
     NSString* pattern = [NSString stringWithFormat: @"https://www.googleapis.com/customsearch/v1?q=%@&cx=012688650386050678524:1n2t8uihlam&key=AIzaSyCpXbdM5G63KxpTJhwogammwJcmwStXw3M&searchType=image", urlEncoded];
     
-    return [self paginatorWithPattern:  [pattern stringByAppendingString: @"&start=%d&num=%d"]];
+    return [self paginatorWithPattern:  [pattern stringByAppendingString: @"&num=%d"]];
 }
 
 + (id) paginatorWithPattern:(NSString *)pattern {
@@ -55,9 +55,7 @@ static NSUInteger GooglePaginatorDefaultPerPage = 10;   //maximum
 
 - (BOOL) hasNextPage {
     if( self.perPage ) {
-        BOOL lessThan5Pages = ( self.currentOffset / self.perPage ) < 3;
-        BOOL hasMore = self.currentOffset + self.perPage < self.objectCount;
-        return lessThan5Pages && hasMore;
+        return self.currentOffset < 100;    //maximum
     }
     else {
         return NO;
@@ -70,7 +68,7 @@ static NSUInteger GooglePaginatorDefaultPerPage = 10;   //maximum
 }
 
 - (void) loadNextPage {
-    [self loadPageAtOffset: self.currentOffset + self.perPage];
+    [self loadPageAtOffset: self.currentOffset];
 }
 
 - (void) loadPreviousPage {
@@ -78,9 +76,13 @@ static NSUInteger GooglePaginatorDefaultPerPage = 10;   //maximum
 }
 
 - (void) loadPageAtOffset: (NSUInteger) offset {
-    currentOffset = offset;
     
-    NSString* fullPath = [NSString stringWithFormat: self.pattern, self.currentOffset, self.perPage];
+    NSString* fullPath = self.pattern;
+    
+    if( offset )
+        fullPath = [NSString stringWithFormat: [fullPath stringByAppendingString: @"&start=%d"], self.perPage, self.currentOffset];
+    else
+        fullPath = [NSString stringWithFormat: fullPath, self.perPage];
     
     RKObjectManager* manager = [RKObjectManager sharedManager];
     
@@ -110,8 +112,10 @@ static NSUInteger GooglePaginatorDefaultPerPage = 10;   //maximum
         loader.delegate = self;
     }];
     
+    currentOffset = offset + self.perPage;
+    
     NSDictionary* queryParams = [fullPath queryParameters];
-    NSDictionary* params =@{ @"start" : [queryParams objectForKey: @"start"], @"term" : [queryParams objectForKey: @"q"] };
+    NSDictionary* params =@{ @"start" : [NSNumber numberWithInt: self.currentOffset], @"term" : [queryParams objectForKey: @"q"] };
     [FlurryAnalytics logEvent: @"Google search" withParameters: params];
 }
 
@@ -129,14 +133,16 @@ static NSUInteger GooglePaginatorDefaultPerPage = 10;   //maximum
 }
 
 - (void) objectLoader:(RKObjectLoader *)loader willMapData:(inout __autoreleasing id *)mappableData {
-    NSDictionary* next = [*mappableData objectForKey: @"queries.nextPage"];
+    NSDictionary* queries = [*mappableData objectForKey: @"queries"];
+    NSArray* next = [queries objectForKey: @"nextPage"];
     
-    if(!next) {
+    if(![next count]) {
         currentOffset = 0;
     }
     else {
-        perPage = [[next objectForKey: @"count"] intValue];
-        currentOffset = [[next objectForKey: @"startIndex"] intValue];
+        NSDictionary* data = [next objectAtIndex: 0];
+        perPage = [[data objectForKey: @"count"] intValue];
+        currentOffset = [[data objectForKey: @"startIndex"] intValue];
     }
 }
 

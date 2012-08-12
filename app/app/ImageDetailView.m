@@ -10,12 +10,14 @@
 
 #import "SearchResult.h"
 
-#import <iCarousel/iCarousel.h>
+//#import <iCarousel/iCarousel.h>
 #import <SDWebImage/SDImageCache.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 
+#define kInitialDetailViewSize  50.f
+
 @implementation ImageDetailView
-@synthesize carousel;
+@synthesize imageModel = _imageModel;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -29,12 +31,10 @@
 - (id) initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder: aDecoder];
     if( self ) {
-        self.carousel.type = iCarouselTypeTimeMachine;
     }
     return self;
 }
 
-/*
 - (void) setImageModel:(SearchResult *)imageModel {
     _imageModel = imageModel;
     
@@ -64,12 +64,12 @@
                                     [activityIndicator removeFromSuperview];
                                 }];
     }
-}*/
+}
 
 - (void) showFromPoint: (CGPoint) point {
     CGRect finalBounds = self.bounds;
-    self.frame = CGRectMake(0, 0, 50, 50);
-    self.center = point;
+    self.frame = CGRectMake(self.bounds.size.width/2.f-kInitialDetailViewSize/2.f,
+                            self.bounds.size.height/2.f-kInitialDetailViewSize/2.f, 50, 50);
     self.alpha = 0.0f;
     
     [UIView animateWithDuration: 1.0
@@ -89,8 +89,8 @@
                           delay: 0.0
                         options: UIViewAnimationCurveEaseIn
                      animations: ^{
-                         self.frame = CGRectMake(0, 0, 50, 50);
-                         self.center = point;
+                         self.frame = CGRectMake(self.bounds.size.width/2.f-kInitialDetailViewSize/2.f,
+                                                 self.bounds.size.height/2.f-kInitialDetailViewSize/2.f, 50, 50);
                          self.alpha = 0.0f;
                      } completion:^(BOOL finished) {
                          [self removeFromSuperview];

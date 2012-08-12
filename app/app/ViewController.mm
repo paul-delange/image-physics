@@ -264,7 +264,11 @@
             float force = kRADIAL_GRAVITY_FORCE / d.Length();
             
             d.Normalize();
-            b2Vec2 F = force * d;
+            
+            b2Vec2 tangent = b2Cross(d, 1);
+
+            
+            b2Vec2 F = force * d + 1000000 * tangent;
             
             b->ApplyForce(F, position);
             
@@ -326,17 +330,6 @@
     
     CGFloat halfWidth = self.worldCanvas.bounds.size.width/2.f;
     CGFloat halfHeight = self.worldCanvas.bounds.size.height/2.f;
-    
-    if( x < halfWidth )
-        x -= halfWidth;
-    else
-        x += halfWidth;
-    
-    
-    if( y < halfHeight )
-        y -= halfHeight;
-    else
-        y += halfHeight;
     
     physicalView.center = CGPointMake(x, y);
     
@@ -701,8 +694,9 @@
 }
 
 
-- (IBAction) playPushed:(id)sender {
+- (IBAction) playPushed:(UIButton*)sender {
     physicsPaused = !physicsPaused;
+    sender.selected = !sender.selected;
 }
 
 - (IBAction)resetPushed:(UIButton *)sender {
@@ -746,7 +740,7 @@
                                                                      owner: self
                                                                    options: nil] lastObject];
         detailView.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height);
-        
+        detailView.imageModel = view.imageModel;
         [self.view addSubview: detailView];
         [detailView showFromPoint: [self.view convertPoint: view.center fromView: self.worldCanvas]];
     }

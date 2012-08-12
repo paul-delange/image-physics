@@ -9,9 +9,6 @@
 #import <RestKit/RestKit.h>
 
 void configureRestKit(RKObjectManager* manager) {
-    //Docs: https://datamarket.azure.com/dataset/bing/search#schema
-    //Example: https://api.datamarket.azure.com/Bing/Search/Image?Query=%27america%27&$top=10&$format=json
-    
-    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
-    RKLogConfigureByName("RestKit/ObjectMapping", RKLogLevelTrace);
+   // RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
+   // RKLogConfigureByName("RestKit/ObjectMapping", RKLogLevelTrace);
 }

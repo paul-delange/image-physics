@@ -37,7 +37,7 @@
 - (IBAction)morePushed:(UIButton *)sender;
 - (IBAction)enginePushed:(UIButton *)sender;
 - (IBAction)screenshotPushed:(UIButton *)sender;
-- (IBAction)playPushed:(id)sender;
+- (IBAction)playPushed:(UIButton*)sender;
 - (IBAction) refreshPushed:(id)sender;
 
 @end

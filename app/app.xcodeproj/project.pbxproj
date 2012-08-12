@@ -45,8 +45,6 @@
 		524E69DF15C0145F00374314 /* bubble@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 524E69DE15C0145F00374314 /* bubble@2x.png */; };
 		524E69E015C0145F00374314 /* bubble@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 524E69DE15C0145F00374314 /* bubble@2x.png */; };
 		524E69E515C0171C00374314 /* libSDWebImageARC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 524E69E415C0171C00374314 /* libSDWebImageARC.a */; };
-		527DE89515C0402100CFC075 /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 527DE89415C0402100CFC075 /* iCarousel.m */; };
-		527DE89615C0402100CFC075 /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 527DE89415C0402100CFC075 /* iCarousel.m */; };
 		52AF9A2615B427C8008FC1CC /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52AF9A2515B427C8008FC1CC /* CFNetwork.framework */; };
 		52AF9A2815B427CC008FC1CC /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52AF9A2715B427CC008FC1CC /* CoreData.framework */; };
 		52AF9A2A15B427D1008FC1CC /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52AF9A2915B427D1008FC1CC /* Security.framework */; };
@@ -109,6 +107,10 @@
 		52FF605815B6DA6300958C5C /* PlanetView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 52FF605615B6DA6300958C5C /* PlanetView.mm */; };
 		52FF605B15B6DA7600958C5C /* PhysicalImageView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 52FF605A15B6DA7600958C5C /* PhysicalImageView.mm */; };
 		52FF605C15B6DA7600958C5C /* PhysicalImageView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 52FF605A15B6DA7600958C5C /* PhysicalImageView.mm */; };
+		DA161FCC15CD48F000012633 /* more@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA161FCB15CD48F000012633 /* more@2x.png */; };
+		DA161FCD15CD48F000012633 /* more@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA161FCB15CD48F000012633 /* more@2x.png */; };
+		DA161FD015CD4A6400012633 /* screenshot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA161FCF15CD4A6400012633 /* screenshot@2x.png */; };
+		DA161FD115CD4A6400012633 /* screenshot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA161FCF15CD4A6400012633 /* screenshot@2x.png */; };
 		DA7726C215B2E69C008195A1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA7726C115B2E69C008195A1 /* UIKit.framework */; };
 		DA7726C415B2E69C008195A1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA7726C315B2E69C008195A1 /* Foundation.framework */; };
 		DA7726C615B2E69C008195A1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA7726C515B2E69C008195A1 /* CoreGraphics.framework */; };
@@ -124,6 +126,8 @@
 		DAADDF3D15CCF3EF00E16C89 /* libFlurryAppCircle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAADDF3B15CCF3EE00E16C89 /* libFlurryAppCircle.a */; };
 		DAADDF4015CCF61A00E16C89 /* GooglePaginator.m in Sources */ = {isa = PBXBuildFile; fileRef = DAADDF3E15CCF61A00E16C89 /* GooglePaginator.m */; };
 		DAADDF4115CCF61A00E16C89 /* GooglePaginator.m in Sources */ = {isa = PBXBuildFile; fileRef = DAADDF3E15CCF61A00E16C89 /* GooglePaginator.m */; };
+		DAADDF4315CD019B00E16C89 /* magnet@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAADDF4215CD019B00E16C89 /* magnet@2x.png */; };
+		DAADDF4415CD019B00E16C89 /* magnet@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAADDF4215CD019B00E16C89 /* magnet@2x.png */; };
 		DABEF86415BBE1A4003ABF29 /* refresh@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABEF86215BBE1A4003ABF29 /* refresh@2x.png */; };
 		DABEF86515BBE1A4003ABF29 /* search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABEF86315BBE1A4003ABF29 /* search@2x.png */; };
 		DABEF86715BBE1FC003ABF29 /* info@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABEF86615BBE1FC003ABF29 /* info@2x.png */; };
@@ -216,6 +220,8 @@
 		52FF605615B6DA6300958C5C /* PlanetView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PlanetView.mm; sourceTree = "<group>"; };
 		52FF605915B6DA7600958C5C /* PhysicalImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhysicalImageView.h; sourceTree = "<group>"; };
 		52FF605A15B6DA7600958C5C /* PhysicalImageView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PhysicalImageView.mm; sourceTree = "<group>"; };
+		DA161FCB15CD48F000012633 /* more@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "more@2x.png"; sourceTree = "<group>"; };
+		DA161FCF15CD4A6400012633 /* screenshot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "screenshot@2x.png"; sourceTree = "<group>"; };
 		DA7726BD15B2E69C008195A1 /* Imagenetic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Imagenetic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA7726C115B2E69C008195A1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		DA7726C315B2E69C008195A1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -238,6 +244,7 @@
 		DAADDF3B15CCF3EE00E16C89 /* libFlurryAppCircle.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libFlurryAppCircle.a; sourceTree = "<group>"; };
 		DAADDF3E15CCF61A00E16C89 /* GooglePaginator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GooglePaginator.m; sourceTree = "<group>"; };
 		DAADDF3F15CCF61A00E16C89 /* GooglePaginator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GooglePaginator.h; sourceTree = "<group>"; };
+		DAADDF4215CD019B00E16C89 /* magnet@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "magnet@2x.png"; sourceTree = "<group>"; };
 		DABEF86215BBE1A4003ABF29 /* refresh@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "refresh@2x.png"; sourceTree = "<group>"; };
 		DABEF86315BBE1A4003ABF29 /* search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search@2x.png"; sourceTree = "<group>"; };
 		DABEF86615BBE1FC003ABF29 /* info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "info@2x.png"; sourceTree = "<group>"; };
@@ -566,7 +573,10 @@
 		DABEF85B15BBE191003ABF29 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				DA161FCF15CD4A6400012633 /* screenshot@2x.png */,
+				DA161FCB15CD48F000012633 /* more@2x.png */,
 				52CAA40215C6D50200A42F15 /* Providers */,
+				DAADDF4215CD019B00E16C89 /* magnet@2x.png */,
 				524E69DE15C0145F00374314 /* bubble@2x.png */,
 				DABEF87415BC1AC2003ABF29 /* shut@2x.png */,
 				DABEF86E15BC1A01003ABF29 /* pause@2x.png */,
@@ -670,6 +680,9 @@
 				52CAA40D15C6D51300A42F15 /* google@2x.png in Resources */,
 				52CAA40F15C6D51300A42F15 /* bing@2x.png in Resources */,
 				52102ED915CBFE70003C4115 /* SVProgressHUD.bundle in Resources */,
+				DAADDF4415CD019B00E16C89 /* magnet@2x.png in Resources */,
+				DA161FCD15CD48F000012633 /* more@2x.png in Resources */,
+				DA161FD115CD4A6400012633 /* screenshot@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -701,6 +714,9 @@
 				52CAA40C15C6D51300A42F15 /* google@2x.png in Resources */,
 				52CAA40E15C6D51300A42F15 /* bing@2x.png in Resources */,
 				52102ED815CBFE70003C4115 /* SVProgressHUD.bundle in Resources */,
+				DAADDF4315CD019B00E16C89 /* magnet@2x.png in Resources */,
+				DA161FCC15CD48F000012633 /* more@2x.png in Resources */,
+				DA161FD015CD4A6400012633 /* screenshot@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -760,7 +776,6 @@
 				52FEE83215BFDDC800552FAD /* AssetsPaginator.m in Sources */,
 				52FEE83615BFDDE400552FAD /* Paginator.m in Sources */,
 				524E69DC15C0074500374314 /* LoadingView.m in Sources */,
-				527DE89615C0402100CFC075 /* iCarousel.m in Sources */,
 				52F77A3415CBB63500358F1D /* FlikrPaginator.m in Sources */,
 				52102ED615CBFE68003C4115 /* SVProgressHUD.m in Sources */,
 				DAADDF4115CCF61A00E16C89 /* GooglePaginator.m in Sources */,
@@ -791,7 +806,6 @@
 				52FEE83115BFDDC800552FAD /* AssetsPaginator.m in Sources */,
 				52FEE83515BFDDE400552FAD /* Paginator.m in Sources */,
 				524E69DB15C0074500374314 /* LoadingView.m in Sources */,
-				527DE89515C0402100CFC075 /* iCarousel.m in Sources */,
 				52F77A3315CBB63500358F1D /* FlikrPaginator.m in Sources */,
 				52102ED515CBFE68003C4115 /* SVProgressHUD.m in Sources */,
 				DAADDF4015CCF61A00E16C89 /* GooglePaginator.m in Sources */,

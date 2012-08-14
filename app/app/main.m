@@ -18,3 +18,4 @@ int main(int argc, char *argv[])
 }
 
 NSString* kUserDefaultSearchEngineKey = @"CurrentSearchEngine";
+NSString* kUserDefaultHasLaunchedOnceKey = @"HasLaunchedOnce";

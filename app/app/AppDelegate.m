@@ -13,8 +13,6 @@
 
 @implementation AppDelegate
 
-//flurry: C2FZCDDC2CF4QSR53R9C
-
 @synthesize window = _window;
 
 + (void) initialize {

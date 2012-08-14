@@ -27,6 +27,7 @@
 #import <Box2D/Box2D.h>
 #import <CoreData/CoreData.h>
 #import <QuartzCore/QuartzCore.h>
+#import <MediaPlayer/MediaPlayer.h>
 #import <SDWebImage/SDImageCache.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <SVProgressHUD/SVProgressHUD.h>
@@ -52,6 +53,7 @@
 @property (nonatomic, readonly) NSFetchedResultsController* resultsController;
 @property (nonatomic, readonly) NSArray* displayedImagePaths;
 @property (nonatomic, strong) NSObject<Paginator>* paginator;
+@property (nonatomic, strong) MPMoviePlayerController* moviePlayerController;
 
 - (void) setupPhysics;
 - (void) addPhysicalBodyForView: (UIView*) physicalView;
@@ -221,6 +223,28 @@
     displayLink = nil;
 }
 
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear: animated];
+    
+    if( ![[NSUserDefaults standardUserDefaults] boolForKey: kUserDefaultHasLaunchedOnceKey] ) {
+        
+        //Play video
+        NSURL* movieURL = [[NSBundle mainBundle] URLForResource: @"help" withExtension: @"mov"];
+        self.moviePlayerController = [[MPMoviePlayerController alloc] initWithContentURL: movieURL];
+        self.moviePlayerController.movieSourceType = MPMovieSourceTypeFile;
+        
+        // Register to receive a notification when the movie has finished playing.
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(moviePlayBackDidFinish:)
+                                                     name:MPMoviePlayerPlaybackDidFinishNotification
+                                                   object: nil];
+        
+        [self.view addSubview: self.moviePlayerController.view];
+        // [[NSUserDefaults standardUserDefaults] setBool: YES forKey: kUserDefaultHasLaunchedOnceKey];
+        // [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return YES;
 }
@@ -268,7 +292,7 @@
             b2Vec2 tangent = b2Cross(d, 1);
 
             
-            b2Vec2 F = force * d + 1000000 * tangent;
+            b2Vec2 F = force * d + 750000 * tangent;
             
             b->ApplyForce(F, position);
             
@@ -325,11 +349,23 @@
         return;
     
     
-    CGFloat x = arc4random() % (int)self.worldCanvas.bounds.size.width;
-    CGFloat y = arc4random() % (int)self.worldCanvas.bounds.size.height;
-    
     CGFloat halfWidth = self.worldCanvas.bounds.size.width/2.f;
     CGFloat halfHeight = self.worldCanvas.bounds.size.height/2.f;
+    CGFloat quarterWidth = halfWidth / 2.f;
+    CGFloat quarterHeight = halfHeight / 2.f;
+    
+    CGFloat x = arc4random() % (int)halfWidth;
+    CGFloat y = arc4random() % (int)halfHeight;
+    
+    if( y > quarterHeight  )
+        y += halfHeight + quarterHeight;
+    else
+        y -= quarterHeight;
+    
+    if( x > quarterWidth )
+        x += halfHeight + quarterWidth;
+    else
+        x -= quarterWidth;
     
     physicalView.center = CGPointMake(x, y);
     
@@ -728,7 +764,7 @@
 }
 
 - (IBAction)infoPushed:(UIButton *)sender {
-    [InAppPurchaseProvider purchase: kProductIdentifierAlternativeSearches];
+  //[InAppPurchaseProvider purchase: kProductIdentifierAlternativeSearches];
 }
 
 - (IBAction) imageTapped:(UITapGestureRecognizer*)sender {
@@ -773,6 +809,35 @@
         
         [SVProgressHUD showSuccessWithStatus: msg];
     }
+}
+
+- (void) moviePlayBackDidFinish:(NSNotification*)notification {
+    NSNumber* reason = [[notification userInfo] objectForKey: MPMoviePlayerPlaybackDidFinishReasonUserInfoKey];
+    
+    switch (reason.integerValue) {
+        case MPMovieFinishReasonPlaybackEnded:
+            NSLog(@"Playback ended");
+            break;
+        case MPMovieFinishReasonPlaybackError:
+        {
+            NSString* error = [[notification userInfo] objectForKey: @"error"];
+            NSLog(@"Was an error: %@", error);
+            break;
+        }
+        case MPMovieFinishReasonUserExited:
+        {
+            NSLog(@"User exited movie");
+            break;
+        }
+        default:
+            break;
+    }
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:MPMoviePlayerPlaybackDidFinishNotification
+                                                  object:nil];
+    
+    [self.moviePlayerController.view removeFromSuperview];
 }
 
 #pragma mark - Keyboard Management

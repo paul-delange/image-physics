@@ -20,7 +20,7 @@
                           delay: 0.0
                         options:UIViewAnimationOptionRepeat | UIViewAnimationOptionCurveLinear
                      animations:^{
-                         CGAffineTransform transform = CGAffineTransformMakeRotation(M_PI);
+                         CGAffineTransform transform = CGAffineTransformMakeRotation(-M_PI);
                          self.transform = transform;
                      } completion: NULL];
 }
@@ -28,7 +28,7 @@
 - (void) stopAnimating {
     [UIView animateWithDuration: 0.3
                      animations: ^{
-                         self.alpha = 0.0f;
+                         //self.alpha = 0.0f;
                      }];
     
     [UIView animateWithDuration:0.01 delay:0.0 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveLinear animations:^{

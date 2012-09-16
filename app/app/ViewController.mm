@@ -28,6 +28,7 @@
 #import <CoreData/CoreData.h>
 #import <QuartzCore/QuartzCore.h>
 #import <MediaPlayer/MediaPlayer.h>
+#import <MessageUI/MessageUI.h>
 #import <SDWebImage/SDImageCache.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <SVProgressHUD/SVProgressHUD.h>
@@ -38,7 +39,7 @@
 
 #define kAlertViewPaginatedDownload 1298
 
-@interface ViewController () <NSFetchedResultsControllerDelegate, UITextFieldDelegate, UIAlertViewDelegate> {
+@interface ViewController () <NSFetchedResultsControllerDelegate, UITextFieldDelegate, UIAlertViewDelegate, MFMailComposeViewControllerDelegate> {
     b2World* world;
     b2Fixture* magnetFixture;
     NSTimer* tickTimer;
@@ -226,6 +227,7 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear: animated];
     
+    /*
     if( ![[NSUserDefaults standardUserDefaults] boolForKey: kUserDefaultHasLaunchedOnceKey] ) {
         
         //Play video
@@ -243,6 +245,7 @@
         // [[NSUserDefaults standardUserDefaults] setBool: YES forKey: kUserDefaultHasLaunchedOnceKey];
         // [[NSUserDefaults standardUserDefaults] synchronize];
     }
+     */
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -291,8 +294,9 @@
             
             b2Vec2 tangent = b2Cross(d, 1);
 
+            float factor = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 750000 : 5000000;
             
-            b2Vec2 F = force * d + 750000 * tangent;
+            b2Vec2 F = force * d + factor * tangent;
             
             b->ApplyForce(F, position);
             
@@ -433,7 +437,7 @@
         case NSFetchedResultsChangeMove:
         {
             if( ![self.displayedImagePaths containsObject: mediaURL] ) {
-                PhysicalImageView* v = [[PhysicalImageView alloc] initWithFrame: CGRectMake(0, 0, 75, 75)];
+                PhysicalImageView* v = [[PhysicalImageView alloc] initWithFrame: CGRectMake(0, 0, self.planetView.frame.size.width*.8, self.planetView.frame.size.height*.8)];
                 v.imageModel = anObject;
                 [self addPhysicalBodyForView: v];
             }
@@ -547,6 +551,11 @@
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     return currentEngineButton != self.albumButton;
+}
+
+#pragma mark - MFMailComposeViewControllerDelegate
+- (void) mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
+    [self dismissModalViewControllerAnimated: YES];
 }
 
 #pragma mark - Actions
@@ -733,6 +742,13 @@
 - (IBAction) playPushed:(UIButton*)sender {
     physicsPaused = !physicsPaused;
     sender.selected = !sender.selected;
+    
+    if( physicsPaused ) {
+        [self.planetView stopAnimating];
+    }
+    else {
+        [self.planetView startAnimating];
+    }
 }
 
 - (IBAction)resetPushed:(UIButton *)sender {
@@ -742,6 +758,8 @@
     
     for(SearchResult* result in [SearchResult findAll])
         [result deleteEntity];
+    
+    self.moreButton.alpha = 0.f;
     
     [[RKObjectManager sharedManager].objectStore save: nil];
 }
@@ -764,6 +782,12 @@
 }
 
 - (IBAction)infoPushed:(UIButton *)sender {
+    
+    MFMailComposeViewController* vc = [MFMailComposeViewController new];
+    vc.mailComposeDelegate = self;
+    [vc setToRecipients: @[ @"contact@talldevelopments.com" ]];
+    [vc setSubject: @"Imagenetic feedback"];
+    [self presentModalViewController: vc animated: YES];
   //[InAppPurchaseProvider purchase: kProductIdentifierAlternativeSearches];
 }
 

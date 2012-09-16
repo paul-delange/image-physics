@@ -201,7 +201,7 @@
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" clearButtonMode="whileEditing" id="why-C4-bXv">
-                                <rect key="frame" x="102.5" y="15" width="50" height="31"/>
+                                <rect key="frame" x="110" y="15" width="50" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="search"/>
@@ -269,7 +269,7 @@
                 <relationship kind="action" name="enginePushed:" candidateClass="UIButton"/>
                 <relationship kind="action" name="infoPushed:" candidateClass="UIButton"/>
                 <relationship kind="action" name="morePushed:" candidateClass="UIButton"/>
-                <relationship kind="action" name="playPushed:"/>
+                <relationship kind="action" name="playPushed:" candidateClass="UIButton"/>
                 <relationship kind="action" name="refreshPushed:"/>
                 <relationship kind="action" name="screenshotPushed:" candidateClass="UIButton"/>
                 <relationship kind="action" name="searchPushed:"/>

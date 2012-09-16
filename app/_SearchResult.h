@@ -7,10 +7,8 @@
 extern const struct SearchResultAttributes {
 	__unsafe_unretained NSString *contentType;
 	__unsafe_unretained NSString *height;
-	__unsafe_unretained NSString *index;
 	__unsafe_unretained NSString *mediaURL;
 	__unsafe_unretained NSString *sourceUrl;
-	__unsafe_unretained NSString *term;
 	__unsafe_unretained NSString *thumbURL;
 	__unsafe_unretained NSString *title;
 	__unsafe_unretained NSString *width;
@@ -21,8 +19,6 @@ extern const struct SearchResultRelationships {
 
 extern const struct SearchResultFetchedProperties {
 } SearchResultFetchedProperties;
-
-
 
 
 
@@ -65,18 +61,6 @@ extern const struct SearchResultFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSNumber* index;
-
-
-@property int64_t indexValue;
-- (int64_t)indexValue;
-- (void)setIndexValue:(int64_t)value_;
-
-//- (BOOL)validateIndex:(id*)value_ error:(NSError**)error_;
-
-
-
-
 @property (nonatomic, strong) NSString* mediaURL;
 
 
@@ -89,14 +73,6 @@ extern const struct SearchResultFetchedProperties {
 
 
 //- (BOOL)validateSourceUrl:(id*)value_ error:(NSError**)error_;
-
-
-
-
-@property (nonatomic, strong) NSString* term;
-
-
-//- (BOOL)validateTerm:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -155,15 +131,6 @@ extern const struct SearchResultFetchedProperties {
 
 
 
-- (NSNumber*)primitiveIndex;
-- (void)setPrimitiveIndex:(NSNumber*)value;
-
-- (int64_t)primitiveIndexValue;
-- (void)setPrimitiveIndexValue:(int64_t)value_;
-
-
-
-
 - (NSString*)primitiveMediaURL;
 - (void)setPrimitiveMediaURL:(NSString*)value;
 
@@ -172,12 +139,6 @@ extern const struct SearchResultFetchedProperties {
 
 - (NSString*)primitiveSourceUrl;
 - (void)setPrimitiveSourceUrl:(NSString*)value;
-
-
-
-
-- (NSString*)primitiveTerm;
-- (void)setPrimitiveTerm:(NSString*)value;
 
 
 

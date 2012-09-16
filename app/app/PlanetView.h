@@ -10,4 +10,7 @@
 
 @interface PlanetView : PhysicalView
 
+- (void) startAnimating;
+- (void) stopAnimating;
+
 @end

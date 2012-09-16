@@ -228,23 +228,23 @@
     [super viewWillAppear: animated];
     
     /*
-    if( ![[NSUserDefaults standardUserDefaults] boolForKey: kUserDefaultHasLaunchedOnceKey] ) {
-        
-        //Play video
-        NSURL* movieURL = [[NSBundle mainBundle] URLForResource: @"help" withExtension: @"mov"];
-        self.moviePlayerController = [[MPMoviePlayerController alloc] initWithContentURL: movieURL];
-        self.moviePlayerController.movieSourceType = MPMovieSourceTypeFile;
-        
-        // Register to receive a notification when the movie has finished playing.
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(moviePlayBackDidFinish:)
-                                                     name:MPMoviePlayerPlaybackDidFinishNotification
-                                                   object: nil];
-        
-        [self.view addSubview: self.moviePlayerController.view];
-        // [[NSUserDefaults standardUserDefaults] setBool: YES forKey: kUserDefaultHasLaunchedOnceKey];
-        // [[NSUserDefaults standardUserDefaults] synchronize];
-    }
+     if( ![[NSUserDefaults standardUserDefaults] boolForKey: kUserDefaultHasLaunchedOnceKey] ) {
+     
+     //Play video
+     NSURL* movieURL = [[NSBundle mainBundle] URLForResource: @"help" withExtension: @"mov"];
+     self.moviePlayerController = [[MPMoviePlayerController alloc] initWithContentURL: movieURL];
+     self.moviePlayerController.movieSourceType = MPMovieSourceTypeFile;
+     
+     // Register to receive a notification when the movie has finished playing.
+     [[NSNotificationCenter defaultCenter] addObserver:self
+     selector:@selector(moviePlayBackDidFinish:)
+     name:MPMoviePlayerPlaybackDidFinishNotification
+     object: nil];
+     
+     [self.view addSubview: self.moviePlayerController.view];
+     // [[NSUserDefaults standardUserDefaults] setBool: YES forKey: kUserDefaultHasLaunchedOnceKey];
+     // [[NSUserDefaults standardUserDefaults] synchronize];
+     }
      */
 }
 
@@ -293,7 +293,7 @@
             d.Normalize();
             
             b2Vec2 tangent = b2Cross(d, 1);
-
+            
             float factor = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 750000 : 5000000;
             
             b2Vec2 F = force * d + factor * tangent;
@@ -566,47 +566,47 @@
 
 - (IBAction) planetHeld:(UILongPressGestureRecognizer*)sender {
     /*
-    //Called twice for some reason :(
-    if( [self.view viewWithTag: kRoundMenuPlanetViewTag] )
-        return;
-    
-    CGRect frame = CGRectMake(0, 0,self.view.bounds.size.width, self.view.bounds.size.height);
-    RoundMenuView* menu = [[RoundMenuView alloc] initWithFrame: frame];
-    menu.tag = kRoundMenuPlanetViewTag;
-    menu.circleCenter = self.planetView.center;
-    
-    UIButton* playButton = [UIButton buttonWithType: UIButtonTypeCustom];
-    [playButton addTarget: self action: @selector(playPushed:) forControlEvents: UIControlEventTouchUpInside];
-    
-    if( physicsPaused ) {
-        [playButton setImage: [UIImage imageNamed: @"play"] forState: UIControlStateNormal];
-    }
-    else {
-        [playButton setImage: [UIImage imageNamed: @"pause"] forState: UIControlStateNormal];
-    }
-    
-    playButton.frame = self.searchbutton.frame;
-    
-    UIButton* closeButton = [UIButton buttonWithType: UIButtonTypeCustom];
-    [closeButton addTarget: self action: @selector(closeMenuPushed:) forControlEvents: UIControlEventTouchUpInside];
-    [closeButton setImage: [UIImage imageNamed: @"shut"] forState: UIControlStateNormal];
-    closeButton.frame = playButton.frame;
-    
-    UIButton* refreshButton = [UIButton buttonWithType: UIButtonTypeCustom];
-    [refreshButton addTarget: self action: @selector(refreshPushed:) forControlEvents: UIControlEventTouchUpInside];
-    [refreshButton setImage: [UIImage imageNamed: @"refresh"] forState: UIControlStateNormal];
-    refreshButton.frame = playButton.frame;
-    
-    [refreshButton addTarget: self action: @selector(closeMenuPushed:) forControlEvents:UIControlEventTouchUpInside];
-    [playButton addTarget: self action: @selector(closeMenuPushed:) forControlEvents: UIControlEventTouchUpInside];
-    
-    [menu addSubview: closeButton];
-    [menu addSubview: playButton];
-    [menu addSubview: refreshButton];
-    
-    [self.view addSubview: menu];
-    
-    [menu show];
+     //Called twice for some reason :(
+     if( [self.view viewWithTag: kRoundMenuPlanetViewTag] )
+     return;
+     
+     CGRect frame = CGRectMake(0, 0,self.view.bounds.size.width, self.view.bounds.size.height);
+     RoundMenuView* menu = [[RoundMenuView alloc] initWithFrame: frame];
+     menu.tag = kRoundMenuPlanetViewTag;
+     menu.circleCenter = self.planetView.center;
+     
+     UIButton* playButton = [UIButton buttonWithType: UIButtonTypeCustom];
+     [playButton addTarget: self action: @selector(playPushed:) forControlEvents: UIControlEventTouchUpInside];
+     
+     if( physicsPaused ) {
+     [playButton setImage: [UIImage imageNamed: @"play"] forState: UIControlStateNormal];
+     }
+     else {
+     [playButton setImage: [UIImage imageNamed: @"pause"] forState: UIControlStateNormal];
+     }
+     
+     playButton.frame = self.searchbutton.frame;
+     
+     UIButton* closeButton = [UIButton buttonWithType: UIButtonTypeCustom];
+     [closeButton addTarget: self action: @selector(closeMenuPushed:) forControlEvents: UIControlEventTouchUpInside];
+     [closeButton setImage: [UIImage imageNamed: @"shut"] forState: UIControlStateNormal];
+     closeButton.frame = playButton.frame;
+     
+     UIButton* refreshButton = [UIButton buttonWithType: UIButtonTypeCustom];
+     [refreshButton addTarget: self action: @selector(refreshPushed:) forControlEvents: UIControlEventTouchUpInside];
+     [refreshButton setImage: [UIImage imageNamed: @"refresh"] forState: UIControlStateNormal];
+     refreshButton.frame = playButton.frame;
+     
+     [refreshButton addTarget: self action: @selector(closeMenuPushed:) forControlEvents:UIControlEventTouchUpInside];
+     [playButton addTarget: self action: @selector(closeMenuPushed:) forControlEvents: UIControlEventTouchUpInside];
+     
+     [menu addSubview: closeButton];
+     [menu addSubview: playButton];
+     [menu addSubview: refreshButton];
+     
+     [self.view addSubview: menu];
+     
+     [menu show];
      */
 }
 
@@ -646,78 +646,94 @@
 }
 
 - (IBAction)enginePushed:(UIButton *)sender {
-    static bool showingEngines = false;
+    NSInteger count = [[NSUserDefaults standardUserDefaults] integerForKey: @"HasShowedEnginesCount"];
     
-    NSSortDescriptor* position = [NSSortDescriptor sortDescriptorWithKey: @"layer.position.y" ascending: YES];
+#if TARGET_IPHONE_SIMULATOR
+    BOOL hasPurchased = YES;
+#else
+    BOOL hasPurchased = [[NSUserDefaults standardUserDefaults] boolForKey: kProductIdentifierAlternativeSearches];
+#endif
     
-    NSArray* buttons = @[self.albumButton, self.googleButton, self.bingButton, self.flikrButton];
-    NSArray* ascending = [buttons sortedArrayUsingDescriptors: [NSArray arrayWithObject: position]];
-    
-    if( showingEngines ) {
+    if( count < 10 || hasPurchased ) {
+        [[NSUserDefaults standardUserDefaults] setInteger: count+1 forKey: @"HasShowedEnginesCount"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
         
-        if( sender == self.albumButton )
-            [[NSUserDefaults standardUserDefaults] setObject: kLocalAlbumSearchEngine forKey: kUserDefaultSearchEngineKey];
-        else if( sender == self.googleButton )
-            [[NSUserDefaults standardUserDefaults] setObject: kGoogleSearchEngine forKey: kUserDefaultSearchEngineKey];
-        else if( sender == self.bingButton )
-            [[NSUserDefaults standardUserDefaults] setObject: kBingSearchEngine forKey: kUserDefaultSearchEngineKey];
-        else if( sender == self.flikrButton )
-            [[NSUserDefaults standardUserDefaults] setObject: kFlikrSearchEngine forKey: kUserDefaultSearchEngineKey];
+        static bool showingEngines = false;
         
-        NSInteger minCount = (sender == currentEngineButton) ? 1 : 0;
+        NSSortDescriptor* position = [NSSortDescriptor sortDescriptorWithKey: @"layer.position.y" ascending: YES];
         
-        //Animate engine buttons away
-        for(NSInteger i=0;i<[ascending count]-minCount;i++) {
-            UIButton* button = [ascending objectAtIndex: [ascending count]-i-1];
+        NSArray* buttons = @[self.albumButton, self.googleButton, self.bingButton, self.flikrButton];
+        NSArray* ascending = [buttons sortedArrayUsingDescriptors: [NSArray arrayWithObject: position]];
+        
+        if( showingEngines ) {
             
-            [UIView animateWithDuration: 0.3 delay: i*0.15 options: UIViewAnimationOptionCurveEaseOut animations: ^{
-                button.alpha = 0.f;
-                button.transform = CGAffineTransformMakeScale(0.1, 0.1);
-            } completion: ^(BOOL finished) {
-                //Show current engine button again
-                if( sender != currentEngineButton && i >= [ascending count] -1 ) {
-                    CGPoint currentCenter = currentEngineButton.center;
-                    CGPoint gotoCenter = sender.center;
-                    
-                    sender.center = currentCenter;
-                    currentEngineButton.center = gotoCenter;
-                    currentEngineButton.transform = CGAffineTransformIdentity;
-                    [UIView animateWithDuration: 0.15 delay: 0 options: 0 animations: ^{
-                        NSArray* now = [buttons sortedArrayUsingDescriptors: [NSArray arrayWithObject: position]];
-                        UIView* top = [now objectAtIndex: 0];
-                        top.alpha = 1.f;
-                        top.transform = CGAffineTransformIdentity;
-                    } completion: ^(BOOL finished) {
+            if( sender == self.albumButton )
+                [[NSUserDefaults standardUserDefaults] setObject: kLocalAlbumSearchEngine forKey: kUserDefaultSearchEngineKey];
+            else if( sender == self.googleButton )
+                [[NSUserDefaults standardUserDefaults] setObject: kGoogleSearchEngine forKey: kUserDefaultSearchEngineKey];
+            else if( sender == self.bingButton )
+                [[NSUserDefaults standardUserDefaults] setObject: kBingSearchEngine forKey: kUserDefaultSearchEngineKey];
+            else if( sender == self.flikrButton )
+                [[NSUserDefaults standardUserDefaults] setObject: kFlikrSearchEngine forKey: kUserDefaultSearchEngineKey];
+            
+            NSInteger minCount = (sender == currentEngineButton) ? 1 : 0;
+            
+            //Animate engine buttons away
+            for(NSInteger i=0;i<[ascending count]-minCount;i++) {
+                UIButton* button = [ascending objectAtIndex: [ascending count]-i-1];
+                
+                [UIView animateWithDuration: 0.3 delay: i*0.15 options: UIViewAnimationOptionCurveEaseOut animations: ^{
+                    button.alpha = 0.f;
+                    button.transform = CGAffineTransformMakeScale(0.1, 0.1);
+                } completion: ^(BOOL finished) {
+                    //Show current engine button again
+                    if( sender != currentEngineButton && i >= [ascending count] -1 ) {
+                        CGPoint currentCenter = currentEngineButton.center;
+                        CGPoint gotoCenter = sender.center;
                         
-                    }];
-                    currentEngineButton = sender;
-                }
-                showingEngines = false;
-            }];
-        }
-        
-        if( sender == self.albumButton ) {
-            self.searchField.text = @"";
-            self.searchField.placeholder = NSLocalizedString(@"To search your photo album, push Search on the keyboard below", @"");
+                        sender.center = currentCenter;
+                        currentEngineButton.center = gotoCenter;
+                        currentEngineButton.transform = CGAffineTransformIdentity;
+                        [UIView animateWithDuration: 0.15 delay: 0 options: 0 animations: ^{
+                            NSArray* now = [buttons sortedArrayUsingDescriptors: [NSArray arrayWithObject: position]];
+                            UIView* top = [now objectAtIndex: 0];
+                            top.alpha = 1.f;
+                            top.transform = CGAffineTransformIdentity;
+                        } completion: ^(BOOL finished) {
+                            
+                        }];
+                        currentEngineButton = sender;
+                    }
+                    showingEngines = false;
+                }];
+            }
+            
+            if( sender == self.albumButton ) {
+                self.searchField.text = @"";
+                self.searchField.placeholder = NSLocalizedString(@"To search your photo album, push Search on the keyboard below", @"");
+            }
+            else {
+                self.searchField.placeholder = NSLocalizedString(@"Enter your search here", @"");
+            }
+            
         }
         else {
-            self.searchField.placeholder = NSLocalizedString(@"Enter your search here", @"");
+            //Animate engine buttons in
+            for(NSUInteger i=1;i<[ascending count];i++) {
+                UIButton* button = [ascending objectAtIndex: i];
+                button.transform = CGAffineTransformMakeScale(0.1, 0.1);
+                
+                [UIView animateWithDuration: 0.3 delay: (i-1)*0.15 options: UIViewAnimationOptionCurveEaseIn animations: ^{
+                    button.alpha = 1.f;
+                    button.transform = CGAffineTransformIdentity;
+                } completion: ^(BOOL finished) {
+                    showingEngines = true;
+                }];
+            }
         }
-        
     }
     else {
-        //Animate engine buttons in
-        for(NSUInteger i=1;i<[ascending count];i++) {
-            UIButton* button = [ascending objectAtIndex: i];
-            button.transform = CGAffineTransformMakeScale(0.1, 0.1);
-            
-            [UIView animateWithDuration: 0.3 delay: (i-1)*0.15 options: UIViewAnimationOptionCurveEaseIn animations: ^{
-                button.alpha = 1.f;
-                button.transform = CGAffineTransformIdentity;
-            } completion: ^(BOOL finished) {
-                showingEngines = true;
-            }];
-        }
+        [InAppPurchaseProvider purchase: kProductIdentifierAlternativeSearches];
     }
 }
 
@@ -788,7 +804,7 @@
     [vc setToRecipients: @[ @"contact@talldevelopments.com" ]];
     [vc setSubject: @"Imagenetic feedback"];
     [self presentModalViewController: vc animated: YES];
-  //[InAppPurchaseProvider purchase: kProductIdentifierAlternativeSearches];
+    //[InAppPurchaseProvider purchase: kProductIdentifierAlternativeSearches];
 }
 
 - (IBAction) imageTapped:(UITapGestureRecognizer*)sender {
@@ -813,6 +829,9 @@
     
     if( [identifier isEqualToString: kProductIdentifierPaginatedSearches] ) {
         [self morePushed: self.moreButton];
+    }
+    else if( [identifier isEqualToString: kProductIdentifierAlternativeSearches] ) {
+        [self enginePushed: currentEngineButton];
     }
 }
 

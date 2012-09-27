@@ -7,7 +7,6 @@
 //
 
 #import "InAppPurchaseProvider.h"
-#import "InAppPurchaseProvider+SecurityBreach.h"
 
 #import <RestKit/RestKit.h>
 
@@ -15,13 +14,6 @@ NSString* kProductPurchasedNotification = @"ProductPurchased";
 NSString* kProductPurchasedIdentifierKey = @"ProductPurchasedIdentifier";
 NSString* kProductIdentifierAlternativeSearches = @"Unlock.Other.Search";
 NSString* kProductIdentifierPaginatedSearches = @"Unlock.More.Search";
-
-
-@interface InAppPurchaseProvider ()
-
-+ (BOOL) verifyPurchase: (SKPaymentTransaction*) transaction;
-
-@end
 
 @implementation InAppPurchaseProvider
 

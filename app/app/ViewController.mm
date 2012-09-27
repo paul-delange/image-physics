@@ -274,7 +274,7 @@
     
 	// Instruct the world to perform a single step of simulation. It is
 	// generally best to keep the time step and iterations fixed.
-	world->Step(1.0f/60.0f, velocityIterations, positionIterations);
+	world->Step(1.0f/60.f, velocityIterations, positionIterations);
     
     b2CircleShape* circle = (b2CircleShape*)magnetFixture->GetShape();
     b2Body* body = magnetFixture->GetBody();
@@ -308,11 +308,13 @@
                 
                 //NSLog(@"Was: %@", NSStringFromCGPoint(newCenter));
                 
-                newCenter = CGPointMake( b->GetPosition().x, self.worldCanvas.bounds.size.height - b->GetPosition().y );
+                CGFloat x = b->GetPosition().x;
+                CGFloat y = self.worldCanvas.bounds.size.height - b->GetPosition().y;
                 
-                // NSLog(@"Now: %@", NSStringFromCGPoint(newCenter));
-                
-                oneView.center = newCenter;
+                if( b2IsValid(x) && b2IsValid(y) ) {
+                    newCenter = CGPointMake( x,  y);
+                    oneView.center = newCenter;
+                }
             }
         }
 	}
@@ -381,7 +383,9 @@
         b2BodyDef bodyDef;
         bodyDef.type = b2_dynamicBody;
         
-        bodyDef.position.Set(p.x, self.worldCanvas.bounds.size.height-p.y);
+        CGFloat x = p.x;
+        CGFloat y = self.worldCanvas.bounds.size.height-p.y;
+        bodyDef.position.Set(x, y);
         bodyDef.userData = (__bridge void*)physicalView;
         bodyDef.fixedRotation = true;
         
